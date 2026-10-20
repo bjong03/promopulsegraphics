@@ -5,16 +5,16 @@
 // then nudge the scene/beat times below.
 // ─────────────────────────────────────────────────────────────
 
-/** 58.7 s: the pause before the closer was tightened by 1.3 s. */
-export const FILM_SECONDS = 58.7;
+/** 59.15 s: closer pause tightened by 1.3 s; clip 2 allowed to finish (+0.45 s). */
+export const FILM_SECONDS = 59.15;
 
 export const SCENES = {
   chaos: { from: 0, to: 12.6 }, // Dana + fragmented workflow, ends on freeze + silence
   shelf: { from: 12.6, to: 20.6 }, // perishable selling window
-  reveal: { from: 20.2, to: 28.2 }, // fragments align → Promo Pulse workspace
-  product: { from: 27.9, to: 42.4 }, // Suggest → Approve → Execute → record
-  impact: { from: 42.1, to: 51.3 }, // Monitor → ≈ C$79M
-  close: { from: 51.1, to: 58.7 }, // calm Dana → end card
+  reveal: { from: 20.2, to: 28.65 }, // fragments align → Promo Pulse workspace
+  product: { from: 28.35, to: 42.85 }, // Suggest → Approve → Execute → record
+  impact: { from: 42.55, to: 51.75 }, // Monitor → ≈ C$79M
+  close: { from: 51.55, to: 59.15 }, // calm Dana → end card
 };
 
 /** Beats inside scenes (film seconds). */
@@ -34,20 +34,20 @@ export const BEAT = {
   workspace: 23.6,
   headline: 24.4,
   // product
-  suggest: 30.1,
-  compare: 31.4,
-  approve: 32.9,
-  execute: 34.6,
-  record: 35.8,
-  noEmails: 39.1,
+  suggest: 30.55,
+  compare: 31.85,
+  approve: 33.35,
+  execute: 35.05,
+  record: 36.25,
+  noEmails: 39.55,
   // impact
-  monitor: 42.3,
-  scale: 46.2,
-  figure: 47.6,
+  monitor: 42.75,
+  scale: 46.65,
+  figure: 48.05,
   // close
-  calm: 51.1,
-  endCard: 54.6,
-  tagline: 56.15,
+  calm: 51.55,
+  endCard: 55.05,
+  tagline: 56.6,
 };
 
 /**
@@ -58,10 +58,10 @@ export const BEAT = {
 export const VO_CLIPS = [
   { file: "audio/vo/matched/vo1-intro.wav", at: 0, trim: 0.25, dur: 11.72 },
   { file: "audio/vo/matched/vo1-intro.wav", at: 12.62, trim: 12.3, dur: 7.6 },
-  { file: "audio/vo/matched/vo2-reveal.wav", at: 21.07, trim: 0.7, dur: 6.7 },
-  { file: "audio/vo/matched/vo3-solution.wav", at: 27.97, trim: 0.7, dur: 14.0 },
-  { file: "audio/vo/matched/vo4-impact-close.wav", at: 42.17, trim: 0.2, dur: 8.62 },
-  { file: "audio/vo/matched/vo4-impact-close.wav", at: 51.07, trim: 8.95, dur: 7.3 },
+  { file: "audio/vo/matched/vo2-reveal.wav", at: 21.07, trim: 0.7, dur: 7.05 },
+  { file: "audio/vo/matched/vo3-solution.wav", at: 28.42, trim: 0.7, dur: 14.0 },
+  { file: "audio/vo/matched/vo4-impact-close.wav", at: 42.62, trim: 0.2, dur: 8.62 },
+  { file: "audio/vo/matched/vo4-impact-close.wav", at: 51.52, trim: 8.95, dur: 7.3 },
 ];
 
 /** Subtitles — the narration verbatim, split into readable lines. */
@@ -75,16 +75,16 @@ export const CAPTIONS: { from: number; to: number; text: string }[] = [
   { from: 18.06, to: 20.12, text: "That’s the reality of a category manager." },
   { from: 21.23, to: 24.2, text: "Promo Pulse turns the retail data she already has" },
   { from: 24.33, to: 27.55, text: "into timely promotion campaigns designed to benefit both retailer and brand." },
-  { from: 28.12, to: 29.95, text: "Promo pulse can do 3 key things:" },
-  { from: 30.17, to: 32.3, text: "1. It flags at-risk products," },
-  { from: 32.67, to: 35.7, text: "2. streamlines brand approvals and store readiness," },
-  { from: 35.77, to: 38.75, text: "and 3. keeps every key deal decision traceable." },
-  { from: 39.07, to: 41.9, text: "No more chasing emails to find out where a promotion stands." },
-  { from: 42.31, to: 46.15, text: "Dana tracks results store by store, identifying where action matters most." },
-  { from: 46.45, to: 50.6, text: "At Loblaw scale, modeled annual value potential reaches C$79 million." },
-  { from: 51.28, to: 54.5, text: "Promo Pulse turns perishable inventory into opportunity—" },
-  { from: 54.76, to: 55.9, text: "at the speed of fresh." },
-  { from: 56.16, to: 58.3, text: "Less waste. Smarter promotions." },
+  { from: 28.57, to: 30.4, text: "Promo pulse can do 3 key things:" },
+  { from: 30.62, to: 32.75, text: "1. It flags at-risk products," },
+  { from: 33.12, to: 36.15, text: "2. streamlines brand approvals and store readiness," },
+  { from: 36.22, to: 39.2, text: "and 3. keeps every key deal decision traceable." },
+  { from: 39.52, to: 42.35, text: "No more chasing emails to find out where a promotion stands." },
+  { from: 42.76, to: 46.6, text: "Dana tracks results store by store, identifying where action matters most." },
+  { from: 46.9, to: 51.05, text: "At Loblaw scale, modeled annual value potential reaches C$79 million." },
+  { from: 51.73, to: 54.95, text: "Promo Pulse turns perishable inventory into opportunity—" },
+  { from: 55.21, to: 56.35, text: "at the speed of fresh." },
+  { from: 56.61, to: 58.75, text: "Less waste. Smarter promotions." },
 ];
 
 /** Sound effects: file in public/audio/sfx, film second, volume. */
@@ -109,18 +109,18 @@ export const SFX: { file: string; at: number; vol: number }[] = [
   { file: "tick", at: 22.95, vol: 0.3 },
   { file: "tick", at: 23.2, vol: 0.3 },
   // product
-  { file: "tick", at: 30.3, vol: 0.35 },
-  { file: "confirm", at: 31.1, vol: 0.35 },
-  { file: "tick", at: 33.35, vol: 0.28 },
-  { file: "tick", at: 33.55, vol: 0.28 },
-  { file: "tick", at: 33.75, vol: 0.28 },
-  { file: "tick", at: 33.95, vol: 0.28 },
-  { file: "chime", at: 34.25, vol: 0.4 },
-  { file: "confirm", at: 35.3, vol: 0.3 },
-  { file: "tick", at: 41.0, vol: 0.3 },
+  { file: "tick", at: 30.75, vol: 0.35 },
+  { file: "confirm", at: 31.55, vol: 0.35 },
+  { file: "tick", at: 33.8, vol: 0.28 },
+  { file: "tick", at: 34.0, vol: 0.28 },
+  { file: "tick", at: 34.2, vol: 0.28 },
+  { file: "tick", at: 34.4, vol: 0.28 },
+  { file: "chime", at: 34.7, vol: 0.4 },
+  { file: "confirm", at: 35.75, vol: 0.3 },
+  { file: "tick", at: 41.45, vol: 0.3 },
   // impact
-  { file: "tick", at: 44.6, vol: 0.3 },
-  { file: "impact", at: 47.7, vol: 0.35 },
+  { file: "tick", at: 45.05, vol: 0.3 },
+  { file: "impact", at: 48.15, vol: 0.35 },
   // close
-  { file: "chime", at: 54.7, vol: 0.3 },
+  { file: "chime", at: 55.15, vol: 0.3 },
 ];

@@ -17,10 +17,10 @@ const M = pageX(2);
 // Camera path in strip coordinates.
 const CAM = [
   { at: 22.4, cx: 800, cy: 396, z: 1 },
-  { at: 30.0, cx: 800, cy: 396, z: 1 },
-  { at: 30.6, cx: 560, cy: 200, z: 1.36 },
-  { at: 30.95, cx: 560, cy: 200, z: 1.36 },
-  { at: 31.45, cx: 1032, cy: 360, z: 1.42 },
+  { at: 30.45, cx: 800, cy: 396, z: 1 },
+  { at: 31.05, cx: 560, cy: 200, z: 1.36 },
+  { at: 31.4, cx: 560, cy: 200, z: 1.36 },
+  { at: 31.9, cx: 1032, cy: 360, z: 1.42 },
   { at: BEAT.compare + 0.2, cx: 1032, cy: 470, z: 1.36 },
   { at: BEAT.approve, cx: 1032, cy: 470, z: 1.36 },
   { at: BEAT.approve + 0.5, cx: 1032, cy: 560, z: 1.42 },
@@ -32,7 +32,7 @@ const CAM = [
   { at: BEAT.record + 0.6, cx: E + 1188, cy: 396, z: 1.05 },
   { at: BEAT.noEmails - 0.1, cx: E + 1188, cy: 396, z: 1.05 },
   { at: BEAT.noEmails + 0.5, cx: E + 800, cy: 396, z: 1 },
-  { at: 41.6, cx: E + 800, cy: 396, z: 1 },
+  { at: 42.05, cx: E + 800, cy: 396, z: 1 },
   { at: BEAT.monitor + 0.2, cx: M + 800, cy: 396, z: 1 },
   { at: BEAT.monitor + 1.4, cx: M + 800, cy: 396, z: 1 },
   { at: BEAT.monitor + 2.0, cx: M + 600, cy: 560, z: 1.25 },
@@ -43,16 +43,16 @@ const CAM = [
 ];
 
 const STAGE_LABELS = [
-  { from: 30.1, to: BEAT.approve, text: "SUGGEST" },
+  { from: 30.55, to: BEAT.approve, text: "SUGGEST" },
   { from: BEAT.approve, to: BEAT.execute, text: "APPROVE" },
   { from: BEAT.execute, to: BEAT.monitor, text: "EXECUTE" },
   { from: BEAT.monitor, to: BEAT.scale + 0.4, text: "MONITOR" },
 ];
 const STEPS = ["DETECT", "RECOMMEND", "APPROVE", "EXECUTE", "MONITOR"];
-const stepIndex = (T: number) => (T < 31.0 ? 0 : T < BEAT.approve ? 1 : T < BEAT.execute ? 2 : T < BEAT.monitor ? 3 : 4);
+const stepIndex = (T: number) => (T < 31.45 ? 0 : T < BEAT.approve ? 1 : T < BEAT.execute ? 2 : T < BEAT.monitor ? 3 : 4);
 
 const StageBand: React.FC<{ T: number }> = ({ T }) => {
-  const vis = win(T, 29.9, BEAT.scale + 0.5, 0.45);
+  const vis = win(T, 30.35, BEAT.scale + 0.5, 0.45);
   const idx = stepIndex(T);
   return (
     <div style={{ position: "absolute", left: 160, right: 160, top: 34, height: 60, display: "flex", alignItems: "center", fontFamily: DISPLAY, opacity: vis }}>
@@ -210,7 +210,7 @@ export const productRect = (T: number): WinRect => {
 };
 
 export const Product: React.FC<{ T: number }> = ({ T }) => {
-  if (T < 22.4 || T > 48.2) return null;
+  if (T < 22.4 || T > 48.65) return null;
   const cam = productCamera(T);
 
   const rect = productRect(T);
@@ -218,7 +218,7 @@ export const Product: React.FC<{ T: number }> = ({ T }) => {
 
   // Focus / dimming per beat.
   const suggestFocus =
-    T > 25.9 && T < 27.6 ? "econ" : T > 30.1 && T < 30.95 ? "trigger" : T >= 30.95 && T < BEAT.compare ? "options" : T >= BEAT.compare && T < BEAT.approve ? "econ" : T >= BEAT.approve && T < BEAT.execute ? "send" : null;
+    T > 25.9 && T < 27.6 ? "econ" : T > 30.55 && T < 31.4 ? "trigger" : T >= 31.4 && T < BEAT.compare ? "options" : T >= BEAT.compare && T < BEAT.approve ? "econ" : T >= BEAT.approve && T < BEAT.execute ? "send" : null;
   const executeFocus = T >= BEAT.execute + 0.75 && T < BEAT.record ? "stores" : T >= BEAT.record && T < BEAT.noEmails ? "record" : null;
   const monitorFocus = T >= BEAT.monitor + 2.0 && T < BEAT.monitor + 2.9 ? "stores" : T >= BEAT.monitor + 2.9 && T < BEAT.scale ? "rec" : null;
   const tab = T < BEAT.execute ? 0 : T < BEAT.monitor ? lerp(0, 1, p(T, BEAT.execute, 0.5, inOut)) : lerp(1, 2, p(T, BEAT.monitor - 0.2, 0.5, inOut));

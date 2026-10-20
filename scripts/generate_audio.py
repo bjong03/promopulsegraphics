@@ -6,7 +6,7 @@ so the output is ours to use. Run from the repo root:
     python3 scripts/generate_audio.py
 
 Writes public/audio/music/score.wav and public/audio/sfx/*.wav. The score's
-sections line up with src/film/timeline.ts (58.7 s, 48 kHz stereo).
+sections line up with src/film/timeline.ts (59.15 s, 48 kHz stereo).
 """
 import os
 import wave
@@ -155,7 +155,7 @@ def sfx():
 
 # ───────────────────────────────── score ─────────────────────────────────
 def score():
-    dur = 58.7
+    dur = 59.15
     n = int(dur * SR)
     L = np.zeros(n)
     t_all = t_axis(dur)
@@ -193,7 +193,7 @@ def score():
 
     # 20.0 – 21.2: deliberate near-silence (the swell SFX rises into 21.2).
 
-    # 21.2 – 47.6: Promo Pulse theme. Warm major progression, plucked arpeggio.
+    # 21.2 – 48.05: Promo Pulse theme. Warm major progression, plucked arpeggio.
     bpm = 100
     bar = 4 * 60 / bpm  # 2.4 s
     prog = [
@@ -203,7 +203,7 @@ def score():
         [45, 52, 57, 61, 64, 66],  # A6sus-ish
     ]
     start = 21.2
-    end = 47.6
+    end = 48.05
     i = 0
     tb = start
     while tb < end - 0.1:
@@ -235,18 +235,18 @@ def score():
         tb += bar
         i += 1
 
-    # 47.6 – 51.1: broader, more confident — wider voicing, low octave, shimmer.
-    for c, (tb, cd) in enumerate(((47.6, 2.4), (50.0, 1.3))):
+    # 48.05 – 51.55: broader, more confident — wider voicing, low octave, shimmer.
+    for c, (tb, cd) in enumerate(((48.05, 2.4), (50.45, 1.3))):
         chord = [38, 50, 57, 62, 66, 69, 74, 78] if c == 0 else [43, 55, 59, 62, 66, 71, 74]
         tt = t_axis(cd + 1.5)
         pad = sum(pad_voice(hz(m), cd + 1.5, 9, 1.8) * (0.6 if j < 2 else 0.2) for j, m in enumerate(chord))
         place(L, pad * env_adsr(len(tt), 0.25 if c == 0 else 0.5, 1.4) * 0.12, tb)
 
-    # 51.1 – 58.7: resolution. Bm7 → Gmaj7 → D (held, fading to silence).
+    # 51.55 – 59.15: resolution. Bm7 → Gmaj7 → D (held, fading to silence).
     for tb, cd, chord, a in (
-        (51.1, 1.9, [47, 59, 62, 66, 69], 0.5),
-        (52.9, 1.8, [43, 55, 59, 62, 66], 0.4),
-        (54.6, 4.1, [38, 50, 57, 62, 66, 69, 74], 0.8),
+        (51.55, 1.9, [47, 59, 62, 66, 69], 0.5),
+        (53.35, 1.8, [43, 55, 59, 62, 66], 0.4),
+        (55.05, 4.1, [38, 50, 57, 62, 66, 69, 74], 0.8),
     ):
         tt = t_axis(cd + 0.6)
         pad = sum(pad_voice(hz(m), cd + 0.6, 8, 2.0) * (0.55 if j < 2 else 0.22) for j, m in enumerate(chord))
