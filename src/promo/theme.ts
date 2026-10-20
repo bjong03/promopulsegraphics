@@ -1,12 +1,13 @@
 // Visual tokens copied from "Promo Pulse Prototype.html" (SAP Fiori Horizon, light theme).
-import { loadFont } from "@remotion/google-fonts/SourceSans3";
+import { loadFont } from "@remotion/fonts";
+import { staticFile } from "remotion";
 
-const { fontFamily } = loadFont("normal", {
-  weights: ["300", "400", "600", "700"],
-  subsets: ["latin"],
-});
+// Local copy of Source Sans 3 (the prototype's fallback face) in public/fonts.
+for (const w of ["300", "400", "600", "700"]) {
+  loadFont({ family: "Source Sans 3", url: staticFile(`fonts/SourceSans3-${w}.woff2`), weight: w });
+}
 
-export const FONT = fontFamily;
+export const FONT = "'Source Sans 3', system-ui, sans-serif";
 
 export const C = {
   bg: "#F5F6F7",

@@ -1,14 +1,11 @@
-// Google Fonts via @remotion/google-fonts. Loading is handled for you:
-// Remotion waits until the font is ready before rendering each frame.
-// To switch fonts: import a different one, e.g.
-//   import { loadFont } from "@remotion/google-fonts/Montserrat";
-// For a local font file, drop it in public/fonts/ and use @remotion/fonts
-// (`loadFont({ family, url: staticFile("fonts/MyFont.woff2") })`).
-import { loadFont } from "@remotion/google-fonts/Inter";
+// Fonts are loaded from public/fonts with @remotion/fonts, so rendering never
+// needs the network. Remotion waits until the font is ready before each frame.
+// To add a font: drop the .woff2 in public/fonts/ and call loadFont again.
+// (@remotion/google-fonts is also installed if you prefer fetching from Google,
+//  e.g. `import { loadFont } from "@remotion/google-fonts/Montserrat"`.)
+import { loadFont } from "@remotion/fonts";
+import { staticFile } from "remotion";
 
-const { fontFamily } = loadFont("normal", {
-  weights: ["400", "600", "800"],
-  subsets: ["latin"],
-});
+loadFont({ family: "Inter", url: staticFile("fonts/Inter-Variable.woff2"), weight: "100 900" });
 
-export const FONT_FAMILY = fontFamily;
+export const FONT_FAMILY = "Inter, system-ui, sans-serif";

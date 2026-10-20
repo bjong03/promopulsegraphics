@@ -4,6 +4,7 @@ import { KineticText, kineticTextDefaults, kineticTextSchema } from "./compositi
 import { LowerThird, lowerThirdDefaults, lowerThirdSchema } from "./compositions/LowerThird";
 import { OverlayBadge, overlayBadgeDefaults, overlayBadgeSchema } from "./compositions/OverlayBadge";
 import { TitleCard, titleCardDefaults, titleCardSchema } from "./compositions/TitleCard";
+import { FILM_FPS, FILM_FRAMES, PromoPulseFilm, promoPulseFilmDefaults, promoPulseFilmSchema } from "./compositions/PromoPulseFilm";
 import { PromoPulsePitch, promoPulsePitchDefaults, promoPulsePitchSchema } from "./compositions/PromoPulsePitch";
 import { PromoPulseDemo } from "./promo/Demo";
 import { PromoPulseEnd } from "./promo/EndCard";
@@ -19,6 +20,18 @@ const canvas = { width: WIDTH, height: HEIGHT, fps: FPS };
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* 60-second competition film (fixed at 1920×1080, 30 fps, 1800 frames). */}
+      <Composition
+        id="PromoPulseFilm"
+        component={PromoPulseFilm}
+        durationInFrames={FILM_FRAMES}
+        fps={FILM_FPS}
+        width={1920}
+        height={1080}
+        schema={promoPulseFilmSchema}
+        defaultProps={promoPulseFilmDefaults}
+      />
+
       {/* The pitch video, plus each section on its own for editing in your NLE. */}
       <Folder name="PromoPulse">
         <Composition

@@ -36,7 +36,57 @@ public/                   static assets → reference with staticFile("…")
 out/                      renders (git-ignored)
 ```
 
-## Promo Pulse pitch video
+## Promo Pulse — 60-second film (`PromoPulseFilm`)
+
+The competition film: 1920×1080, 30 fps, exactly 1,800 frames. Every visual is
+drawn in React/SVG/CSS (no footage, screenshots or stock), and it renders
+fully offline: fonts and audio are local files.
+
+```bash
+npm run studio                       # pick "PromoPulseFilm"
+npx remotion render PromoPulseFilm out/PromoPulseFilm.mp4 --codec=h264 --crf=18
+```
+
+| Time      | Scene                                                                      |
+| --------- | -------------------------------------------------------------------------- |
+| 0 – 12.6  | Dana at her desk; late alerts, email negotiation, conflicting store plans; freeze + silence |
+| 12.6 – 18 | Chilled shelf: the at-risk yogurt and its shrinking selling window          |
+| 18 – 23   | Dana among the pieces → they align → Promo Pulse → pieces land in the app   |
+| 23 – 46   | One promotion through Suggest → Compare → Approve → Execute → record → Monitor |
+| 46 – 52   | One workspace among many → ≈ C$79M modeled annual value potential           |
+| 52 – 60   | Dana, calm → end card                                                       |
+
+**Code** (`src/film/`): `timeline.ts` (every scene/beat time, voiceover
+placement, captions, sound cues), `Dana.tsx` (layered vector character with
+tension / look / typing / blink controls), `Desk.tsx`, `Fragments.tsx`
+(report, alert, emails, spreadsheet, store task, plan versions), `Shelf.tsx`,
+`Type.tsx` (headlines, lower third, labels), `app/` (the Promo Pulse UI:
+Suggest, Execute and Monitor pages on one camera strip), `scenes/`,
+`Captions.tsx`, `Soundtrack.tsx`.
+
+**Data**: interface figures come from `Promo Pulse Prototype.html`. The yogurt
+deal's Execute/Monitor numbers were produced by the prototype's own model
+(send → launch → "Simulate next day" ×3). See `src/film/app/data.ts`.
+The C$79M figure is the modeled full-rollout scenario from the narration script
+and is always labelled "modeled", never as an achieved result.
+
+**Audio**
+
+- Voiceover: the four recorded clips in `public/audio/vo/` (originals `.m4a`),
+  level-matched copies in `public/audio/vo/matched/` (plain gain, see
+  `scripts/normalize_vo.py`). Clip 1 is split at its natural pause to create the
+  freeze-frame silence. Placement lives in `VO_CLIPS` in `timeline.ts`.
+- Score and sound effects are original, synthesized by
+  `python3 scripts/generate_audio.py` (numpy, fixed seed) into
+  `public/audio/music/score.wav` and `public/audio/sfx/`. The score ducks under
+  the narration automatically.
+- Props in the Studio toggle `voiceover`, `music`, `sfx`, `captions` and set
+  `musicVolume`.
+
+**Re-recording a line**: replace the clip, re-run the normalize step, then
+update `VO_CLIPS`, `CAPTIONS` and (if timing moved) `BEAT` in `timeline.ts`.
+
+## Promo Pulse pitch video (27 s)
 
 A 27-second reveal + product demo built from `Promo Pulse Prototype.html` — same
 SAP Fiori styling, screens and figures (Greek yogurt trigger, Brightfield Dairy
@@ -182,8 +232,11 @@ MP4/H.264 has **no alpha** — use ProRes 4444 or PNG for anything transparent.
 
 ## Fonts
 
-`src/fonts.ts` loads **Inter** via `@remotion/google-fonts`. To change it, swap the
-import (e.g. `@remotion/google-fonts/Montserrat`) — every graphic uses `FONT_FAMILY`.
+Fonts are local files in `public/fonts/` (Inter and Source Sans 3, both SIL Open
+Font License), loaded with `@remotion/fonts`, so renders never need the network.
+`src/fonts.ts` loads **Inter** for the starter graphics — every one uses
+`FONT_FAMILY`. To change it, drop a `.woff2` in `public/fonts/` and point
+`loadFont` at it (or use `@remotion/google-fonts` if fetching from Google is fine).
 Remotion waits for the font before rendering each frame, so no fallback-font flashes.
 
 ## Sound effects
