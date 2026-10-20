@@ -5,15 +5,16 @@
 // then nudge the scene/beat times below.
 // ─────────────────────────────────────────────────────────────
 
-export const FILM_SECONDS = 60;
+/** 58.7 s: the pause before the closer was tightened by 1.3 s. */
+export const FILM_SECONDS = 58.7;
 
 export const SCENES = {
   chaos: { from: 0, to: 12.6 }, // Dana + fragmented workflow, ends on freeze + silence
   shelf: { from: 12.6, to: 20.6 }, // perishable selling window
   reveal: { from: 20.2, to: 28.2 }, // fragments align → Promo Pulse workspace
   product: { from: 27.9, to: 42.4 }, // Suggest → Approve → Execute → record
-  impact: { from: 42.1, to: 52.6 }, // Monitor → ≈ C$79M
-  close: { from: 52.4, to: 60 }, // calm Dana → end card
+  impact: { from: 42.1, to: 51.3 }, // Monitor → ≈ C$79M
+  close: { from: 51.1, to: 58.7 }, // calm Dana → end card
 };
 
 /** Beats inside scenes (film seconds). */
@@ -44,9 +45,9 @@ export const BEAT = {
   scale: 46.2,
   figure: 47.6,
   // close
-  calm: 52.4,
-  endCard: 55.9,
-  tagline: 57.45,
+  calm: 51.1,
+  endCard: 54.6,
+  tagline: 56.15,
 };
 
 /**
@@ -60,7 +61,7 @@ export const VO_CLIPS = [
   { file: "audio/vo/matched/vo2-reveal.wav", at: 21.07, trim: 0.7, dur: 6.7 },
   { file: "audio/vo/matched/vo3-solution.wav", at: 27.97, trim: 0.7, dur: 14.0 },
   { file: "audio/vo/matched/vo4-impact-close.wav", at: 42.17, trim: 0.2, dur: 8.62 },
-  { file: "audio/vo/matched/vo4-impact-close.wav", at: 52.37, trim: 8.95, dur: 7.3 },
+  { file: "audio/vo/matched/vo4-impact-close.wav", at: 51.07, trim: 8.95, dur: 7.3 },
 ];
 
 /** Subtitles — the narration verbatim, split into readable lines. */
@@ -81,9 +82,9 @@ export const CAPTIONS: { from: number; to: number; text: string }[] = [
   { from: 39.07, to: 41.9, text: "No more chasing emails to find out where a promotion stands." },
   { from: 42.31, to: 46.15, text: "Dana tracks results store by store, identifying where action matters most." },
   { from: 46.45, to: 50.6, text: "At Loblaw scale, modeled annual value potential reaches C$79 million." },
-  { from: 52.58, to: 55.8, text: "Promo Pulse turns perishable inventory into opportunity—" },
-  { from: 56.06, to: 57.2, text: "at the speed of fresh." },
-  { from: 57.46, to: 59.6, text: "Less waste. Smarter promotions." },
+  { from: 51.28, to: 54.5, text: "Promo Pulse turns perishable inventory into opportunity—" },
+  { from: 54.76, to: 55.9, text: "at the speed of fresh." },
+  { from: 56.16, to: 58.3, text: "Less waste. Smarter promotions." },
 ];
 
 /** Sound effects: file in public/audio/sfx, film second, volume. */
@@ -121,5 +122,5 @@ export const SFX: { file: string; at: number; vol: number }[] = [
   { file: "tick", at: 44.6, vol: 0.3 },
   { file: "impact", at: 47.7, vol: 0.35 },
   // close
-  { file: "chime", at: 56.0, vol: 0.3 },
+  { file: "chime", at: 54.7, vol: 0.3 },
 ];

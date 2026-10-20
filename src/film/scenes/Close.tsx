@@ -1,4 +1,4 @@
-// Scene 6 (52.4 – 60 s): Dana again, now calm — the opening composition with
+// Scene 6 (BEAT.calm → end): Dana again, now calm — the opening composition with
 // the noise gone — then the end card.
 import React from "react";
 import { AbsoluteFill } from "remotion";
@@ -9,13 +9,14 @@ import { BEAT } from "../timeline";
 import { Mark } from "../Type";
 
 export const Close: React.FC<{ T: number }> = ({ T }) => {
-  if (T < 52.3) return null;
-  const inA = p(T, 52.35, 0.6);
-  const t = T - 52.4;
-  const s = lerp(1.3, 1.38, p(T, 52.4, 3.6, inOut));
+  const C0 = BEAT.calm;
+  if (T < C0 - 0.1) return null;
+  const inA = p(T, C0 - 0.05, 0.6);
+  const t = T - C0;
+  const s = lerp(1.3, 1.38, p(T, C0, 3.6, inOut));
   const head = { x: 560, y: 470 };
   const toEnd = p(T, BEAT.endCard, 0.9, inOut);
-  const card = p(T, 53.4, 0.7);
+  const card = p(T, C0 + 1.0, 0.7);
 
   const word = p(T, BEAT.endCard + 0.35, 0.8);
   const less = p(T, BEAT.tagline, 0.6);

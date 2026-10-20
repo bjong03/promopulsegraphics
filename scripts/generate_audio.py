@@ -6,7 +6,7 @@ so the output is ours to use. Run from the repo root:
     python3 scripts/generate_audio.py
 
 Writes public/audio/music/score.wav and public/audio/sfx/*.wav. The score's
-sections line up with src/film/timeline.ts (60 s, 48 kHz stereo).
+sections line up with src/film/timeline.ts (58.7 s, 48 kHz stereo).
 """
 import os
 import wave
@@ -155,7 +155,7 @@ def sfx():
 
 # ───────────────────────────────── score ─────────────────────────────────
 def score():
-    dur = 60.0
+    dur = 58.7
     n = int(dur * SR)
     L = np.zeros(n)
     t_all = t_axis(dur)
@@ -235,22 +235,22 @@ def score():
         tb += bar
         i += 1
 
-    # 47.6 – 52.4: broader, more confident — wider voicing, low octave, shimmer.
-    for c, (tb, cd) in enumerate(((47.6, 2.4), (50.0, 2.6))):
+    # 47.6 – 51.1: broader, more confident — wider voicing, low octave, shimmer.
+    for c, (tb, cd) in enumerate(((47.6, 2.4), (50.0, 1.3))):
         chord = [38, 50, 57, 62, 66, 69, 74, 78] if c == 0 else [43, 55, 59, 62, 66, 71, 74]
         tt = t_axis(cd + 1.5)
         pad = sum(pad_voice(hz(m), cd + 1.5, 9, 1.8) * (0.6 if j < 2 else 0.2) for j, m in enumerate(chord))
         place(L, pad * env_adsr(len(tt), 0.25 if c == 0 else 0.5, 1.4) * 0.12, tb)
 
-    # 52.4 – 60: resolution. Bm7 → Gmaj7 → D (held, fading to silence).
+    # 51.1 – 58.7: resolution. Bm7 → Gmaj7 → D (held, fading to silence).
     for tb, cd, chord, a in (
-        (52.4, 1.9, [47, 59, 62, 66, 69], 0.5),
-        (54.2, 1.8, [43, 55, 59, 62, 66], 0.4),
-        (55.9, 4.1, [38, 50, 57, 62, 66, 69, 74], 0.8),
+        (51.1, 1.9, [47, 59, 62, 66, 69], 0.5),
+        (52.9, 1.8, [43, 55, 59, 62, 66], 0.4),
+        (54.6, 4.1, [38, 50, 57, 62, 66, 69, 74], 0.8),
     ):
         tt = t_axis(cd + 0.6)
         pad = sum(pad_voice(hz(m), cd + 0.6, 8, 2.0) * (0.55 if j < 2 else 0.22) for j, m in enumerate(chord))
-        e = env_adsr(len(tt), a, 0.6 if tb < 55 else cd + 0.6)
+        e = env_adsr(len(tt), a, 0.6 if tb < 54 else cd + 0.6)
         place(L, pad * e * 0.11, tb)
 
     L = reverb(L, 3.0, 0.32)

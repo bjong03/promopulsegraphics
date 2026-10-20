@@ -1,4 +1,4 @@
-// Scene 5b (46.2 – 52.6 s): "At Loblaw scale, modeled annual value potential
+// Scene 5b (46.2 s → BEAT.calm): "At Loblaw scale, modeled annual value potential
 // reaches C$79 million." The one workspace becomes one of many, then gives
 // way to a single, still figure. The figure is a modeled full-rollout
 // scenario, never an achieved result, and is labelled that way.
@@ -31,12 +31,12 @@ const MiniWorkspace: React.FC<{ x: number; y: number; o: number }> = ({ x, y, o 
 );
 
 export const Impact: React.FC<{ T: number }> = ({ T }) => {
-  if (T < BEAT.scale || T > 52.75) return null;
+  if (T < BEAT.scale || T > BEAT.calm + 0.35) return null;
   const field = win(T, BEAT.scale + 0.55, BEAT.figure + 0.2, 0.45);
   const fig = p(T, BEAT.figure, 0.9);
   const sub = p(T, BEAT.figure + 0.55, 0.7);
   const ctx = p(T, BEAT.figure + 0.9, 0.7);
-  const out = p(T, 52.25, 0.45, easeIn);
+  const out = p(T, BEAT.calm - 0.15, 0.45, easeIn);
   const rule = p(T, BEAT.figure + 0.2, 0.8, inOut);
 
   const gx = 200;

@@ -13,6 +13,7 @@ import { Reveal } from "../film/scenes/Reveal";
 import { ShelfScene } from "../film/scenes/ShelfScene";
 import { Soundtrack } from "../film/Soundtrack";
 import { F } from "../film/theme";
+import { BEAT, FILM_SECONDS } from "../film/timeline";
 
 export const promoPulseFilmSchema = z.object({
   voiceover: z.boolean(),
@@ -33,7 +34,7 @@ export const promoPulseFilmDefaults: PromoPulseFilmProps = {
 };
 
 export const FILM_FPS = 30;
-export const FILM_FRAMES = 1800;
+export const FILM_FRAMES = Math.round(FILM_SECONDS * FILM_FPS);
 
 export const PromoPulseFilm: React.FC<PromoPulseFilmProps> = (props) => {
   const frame = useCurrentFrame();
@@ -50,7 +51,7 @@ export const PromoPulseFilm: React.FC<PromoPulseFilmProps> = (props) => {
       <DataFeed T={T} />
       <Close T={T} />
       {/* the end card shows the tagline itself, so captions step aside there */}
-      {props.captions && T < 57.4 ? <Captions T={T} /> : null}
+      {props.captions && T < BEAT.tagline - 0.05 ? <Captions T={T} /> : null}
       <Soundtrack {...props} />
     </AbsoluteFill>
   );
