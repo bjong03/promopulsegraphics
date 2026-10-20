@@ -4,6 +4,11 @@ import { KineticText, kineticTextDefaults, kineticTextSchema } from "./compositi
 import { LowerThird, lowerThirdDefaults, lowerThirdSchema } from "./compositions/LowerThird";
 import { OverlayBadge, overlayBadgeDefaults, overlayBadgeSchema } from "./compositions/OverlayBadge";
 import { TitleCard, titleCardDefaults, titleCardSchema } from "./compositions/TitleCard";
+import { PromoPulsePitch, promoPulsePitchDefaults, promoPulsePitchSchema } from "./compositions/PromoPulsePitch";
+import { PromoPulseDemo } from "./promo/Demo";
+import { PromoPulseEnd } from "./promo/EndCard";
+import { PromoPulseReveal } from "./promo/Reveal";
+import { DEMO_DURATION, END_DURATION, PITCH_DURATION, REVEAL_DURATION } from "./promo/timing";
 
 // Every graphic is registered here. The `id` is what you pass to
 // `npx remotion render <id>`. Size/fps come from src/config.ts so they can be
@@ -14,6 +19,27 @@ const canvas = { width: WIDTH, height: HEIGHT, fps: FPS };
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* The pitch video, plus each section on its own for editing in your NLE. */}
+      <Folder name="PromoPulse">
+        <Composition
+          id="PromoPulsePitch"
+          component={PromoPulsePitch}
+          durationInFrames={sec(PITCH_DURATION)}
+          {...canvas}
+          schema={promoPulsePitchSchema}
+          defaultProps={promoPulsePitchDefaults}
+        />
+        <Composition id="PromoPulseReveal" component={PromoPulseReveal} durationInFrames={sec(REVEAL_DURATION)} {...canvas} />
+        <Composition
+          id="PromoPulseDemo"
+          component={PromoPulseDemo}
+          durationInFrames={sec(DEMO_DURATION)}
+          {...canvas}
+          defaultProps={{ showCaptions: true }}
+        />
+        <Composition id="PromoPulseEnd" component={PromoPulseEnd} durationInFrames={sec(END_DURATION)} {...canvas} />
+      </Folder>
+
       <Folder name="Fullscreen">
         <Composition
           id="TitleCard"

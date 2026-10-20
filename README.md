@@ -36,6 +36,36 @@ public/                   static assets → reference with staticFile("…")
 out/                      renders (git-ignored)
 ```
 
+## Promo Pulse pitch video
+
+A 27-second reveal + product demo built from `Promo Pulse Prototype.html` — same
+SAP Fiori styling, screens and figures (Greek yogurt trigger, Brightfield Dairy
+playbook, orange-juice Monitor view).
+
+| Composition        | Length | What it is                                                        |
+| ------------------ | ------ | ----------------------------------------------------------------- |
+| `PromoPulsePitch`  | 27 s   | Everything below, cross-faded, with optional voiceover            |
+| `PromoPulseReveal` | 7 s    | Logo reveal + tagline ("Meet Promo Pulse…")                       |
+| `PromoPulseDemo`   | 18.4 s | App walkthrough in five captioned beats                           |
+| `PromoPulseEnd`    | 2.6 s  | Closing lockup                                                    |
+
+```bash
+npx remotion render PromoPulsePitch out/PromoPulsePitch.mp4 --codec=h264 --crf=18
+```
+
+**Syncing to your voiceover**
+
+1. Put the recording in `public/audio/`, e.g. `public/audio/voiceover.mp3`.
+2. In the Studio, open `PromoPulsePitch` and set the `voiceover` prop to
+   `audio/voiceover.mp3` (use `voiceoverOffset` to nudge it earlier/later).
+3. Scrub and adjust the beat times in `src/promo/timing.ts` — each value is the
+   second a line of the voiceover starts. Every animation, camera move and caption
+   follows them. Turn `showCaptions` off for a full-height app window.
+
+Code lives in `src/promo/`: `data.ts` (figures from the prototype), `theme.ts`
+(Fiori tokens), `SuggestView.tsx` / `MonitorView.tsx` (screens), `Demo.tsx`
+(window, camera keyframes, captions, toasts), `Reveal.tsx`, `EndCard.tsx`.
+
 ## Preview & live editing
 
 `npm run studio` opens Remotion Studio. Pick a composition in the left sidebar, scrub
