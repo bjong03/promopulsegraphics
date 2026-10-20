@@ -1,0 +1,1030 @@
+<title>Promo Pulse</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&display=swap">
+<style>
+/* Layout: SAP Fiori (Horizon) app. Shell bar with Joule search, side navigation rail, object-page header with blue top bar and icon tab bar, analytical insight cards, tab content, Joule side panel, message toasts */
+:root{
+  --bg:#F5F6F7; --surface:#FFFFFF; --sunk:#F2F4F5; --hover:#EAECEE; --ink:#1D2D3E; --muted:#556B82; --line:#E5E5E5; --field:#BCC3CA; --track:#E1E6EB; --tick:#1D2D3E;
+  --accent:#0064D9; --accent-fill:#0070F2; --accent-hover:#0064D9; --accent-soft:#E1F4FF; --info-line:#A6D8FF; --accent-ring:rgba(0,112,242,.45); --on-accent:#FFFFFF; --avatar:#5D36FF;
+  --cpg:#07838F; --cpg-soft:#DAF6F5;
+  --good:#256F3A; --good-soft:#F5FAE5; --pos-fill:#30914C;
+  --warn:#B44F00; --warn-soft:#FFF8D6; --warn-line:#FFD37A; --crit-fill:#E76500;
+  --bad:#AA0808; --bad-soft:#FFEAF4; --neg-fill:#D20A0A;
+  --scrim:rgba(29,45,62,.28); --toast-bg:#223548; --toast-ink:#FFFFFF; --toast-link:#7CC4FF;
+  --shadow:0 0 2px rgba(34,53,72,.14),0 2px 4px rgba(34,53,72,.14); --shadow2:0 0 4px rgba(34,53,72,.16),0 8px 16px rgba(34,53,72,.16);
+  --display:'72','72full','Source Sans 3',Arial,Helvetica,sans-serif;
+  --body:'72','72full','Source Sans 3',Arial,Helvetica,sans-serif;
+  --mono:'72Mono','SFMono-Regular',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12171C; --surface:#1D232A; --sunk:#242B33; --hover:#2C343D; --ink:#EAECEE; --muted:#A9B4BE; --line:#333C46; --field:#5B6B7B; --track:#2E3843; --tick:#EAECEE;
+  --accent:#4DB1FF; --accent-fill:#0070F2; --accent-hover:#1C84FF; --accent-soft:#0F2D4A; --info-line:#1D5687; --accent-ring:rgba(77,177,255,.45); --on-accent:#FFFFFF; --avatar:#7858FF;
+  --cpg:#4DD0C8; --cpg-soft:#0F3534;
+  --good:#5DC122; --good-soft:#18301A; --pos-fill:#3FA35A;
+  --warn:#F0A43B; --warn-soft:#3B2C10; --warn-line:#6B4A12; --crit-fill:#F07C28;
+  --bad:#FF8888; --bad-soft:#45171C; --neg-fill:#E52929;
+  --scrim:rgba(0,0,0,.5); --toast-bg:#EAECEE; --toast-ink:#1D2D3E; --toast-link:#0064D9;
+  --shadow:0 0 2px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.4); --shadow2:0 0 4px rgba(0,0,0,.5),0 8px 16px rgba(0,0,0,.5); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12171C; --surface:#1D232A; --sunk:#242B33; --hover:#2C343D; --ink:#EAECEE; --muted:#A9B4BE; --line:#333C46; --field:#5B6B7B; --track:#2E3843; --tick:#EAECEE;
+  --accent:#4DB1FF; --accent-fill:#0070F2; --accent-hover:#1C84FF; --accent-soft:#0F2D4A; --info-line:#1D5687; --accent-ring:rgba(77,177,255,.45); --on-accent:#FFFFFF; --avatar:#7858FF;
+  --cpg:#4DD0C8; --cpg-soft:#0F3534;
+  --good:#5DC122; --good-soft:#18301A; --pos-fill:#3FA35A;
+  --warn:#F0A43B; --warn-soft:#3B2C10; --warn-line:#6B4A12; --crit-fill:#F07C28;
+  --bad:#FF8888; --bad-soft:#45171C; --neg-fill:#E52929;
+  --scrim:rgba(0,0,0,.5); --toast-bg:#EAECEE; --toast-ink:#1D2D3E; --toast-link:#0064D9;
+  --shadow:0 0 2px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.4); --shadow2:0 0 4px rgba(0,0,0,.5),0 8px 16px rgba(0,0,0,.5); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.45;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 48px}
+h1,h2,h3{margin:0;font-family:var(--display);text-wrap:balance}
+p{margin:0}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+[data-ic]{display:inline-flex}
+svg.i{flex:none;display:block}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.small{font-size:12.5px}
+.neg{color:var(--bad)}
+.pos-t{color:var(--good)}
+.crit-t{color:var(--warn)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.between{justify-content:space-between}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+
+/* shell bar */
+.shell{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;min-height:56px;background:var(--surface);box-shadow:var(--shadow);position:relative;z-index:5;
+  margin:0 calc(-1 * max(16px, env(safe-area-inset-right, 0px))) 16px calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding-block:6px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.saplogo{display:block;height:28px;width:auto;max-width:none;flex:none;margin-right:4px}
+.mark{width:32px;height:32px;border-radius:9px;background:var(--accent-fill);color:var(--on-accent);display:grid !important;place-items:center;flex:none}
+.brand b{display:block;font-size:16px;line-height:1.2}
+.brand span{display:block;font-size:12.5px;color:var(--muted)}
+.search{justify-self:center;width:min(560px,100%);display:flex;align-items:center;gap:8px;height:38px;border-radius:19px;background:var(--sunk);border:1px solid var(--line);padding-left:14px;padding-right:6px;color:var(--muted)}
+.search:focus-within{border-color:var(--accent);background:var(--surface)}
+.search input{flex:1;min-width:0;border:none;background:transparent;outline:none;height:100%;color:var(--ink);font-size:14px}
+.search input::placeholder{color:var(--muted)}
+.shell-r{display:flex;align-items:center;gap:4px}
+.iconbtn{position:relative;width:38px;height:38px;border-radius:10px;border:none;background:transparent;color:var(--ink);cursor:pointer;display:grid;place-items:center}
+.iconbtn:hover{background:var(--hover)}
+.iconbtn.jb{color:var(--accent)}
+.badge{position:absolute;top:2px;right:1px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--neg-fill);color:var(--on-accent);font-size:10.5px;font-weight:700;line-height:16px;text-align:center}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--avatar);color:var(--on-accent);font-size:12px;font-weight:700;display:grid;place-items:center;flex:none;margin-left:4px}
+
+/* app frame */
+.app{max-width:1480px;margin:0 auto;display:grid;grid-template-columns:60px minmax(0,1fr);gap:16px;align-items:start}
+.rail{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 16px);display:flex;flex-direction:column;gap:6px;padding:8px;background:var(--surface);border-radius:16px;box-shadow:var(--shadow)}
+.rb{position:relative;width:44px;height:44px;border-radius:12px;border:none;background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:background .15s,color .15s}
+.rb:hover{background:var(--hover);color:var(--ink)}
+.rb[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
+.rb[aria-current="page"]::before{content:"";position:absolute;left:-8px;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:var(--accent)}
+.rb .dotb{position:absolute;top:3px;right:2px;min-width:16px;height:16px;border-radius:8px;background:var(--accent-fill);color:var(--on-accent);font-size:10px;font-weight:700;line-height:16px;text-align:center;padding:0 4px}
+.rail-sep{height:1px;background:var(--line);margin:4px 6px}
+main{display:flex;flex-direction:column;gap:16px;min-width:0}
+
+/* object page header */
+.ohead{background:var(--surface);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.ohead::before{content:"";display:block;height:6px;background:var(--accent-fill)}
+.ohead-in{padding:16px 20px 4px;display:flex;flex-direction:column;gap:14px}
+.ttl{display:flex;gap:14px;align-items:center;min-width:0}
+.ttl .mark{width:46px;height:46px;border-radius:13px}
+.ohead h1{font-size:22px;font-weight:700;line-height:1.2}
+.datechip{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;border-radius:10px;background:var(--sunk);font-size:13px;color:var(--muted)}
+.datechip b{color:var(--ink)}
+.kvs{display:flex;flex-wrap:wrap;gap:12px 44px;padding-bottom:12px}
+.kvs div{display:flex;flex-direction:column;gap:1px;min-width:0}
+.kvs span{font-size:13px;color:var(--muted)}
+.kvs b{font-size:16px;font-weight:400}
+.kvs.sm{gap:10px 32px;padding:0}
+.kvs.sm b{font-size:15px;font-weight:600}
+.tabbar{display:flex;gap:2px;padding:0 12px;border-top:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tabbar button{display:flex;align-items:center;gap:7px;min-height:50px;padding:0 14px;border:none;background:transparent;cursor:pointer;color:var(--ink);font-size:14px;position:relative;white-space:nowrap}
+.tabbar button:hover{color:var(--accent)}
+.tabbar button[aria-selected="true"]{color:var(--accent);font-weight:700}
+.tabbar button[aria-selected="true"]::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:var(--accent)}
+.cnt{font-size:11.5px;font-weight:700;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--sunk);color:var(--muted);display:grid;place-items:center}
+.cnt.hot{background:var(--accent-fill);color:var(--on-accent)}
+
+/* cards */
+.card{background:var(--surface);border-radius:16px;box-shadow:var(--shadow);padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0;border:2px solid transparent;transition:box-shadow .2s,transform .2s,border-color .2s}
+.card-h{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.card h3{font-size:15px;font-weight:700;line-height:1.3}
+.card-h small{display:block;font-size:12.5px;color:var(--muted);margin-top:1px}
+.lbl{font-size:12.5px;color:var(--muted);font-weight:600}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:0 4px}
+.sec-h h2{font-size:16px;font-weight:700}
+
+/* insight cards */
+.insights{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.big{font-size:36px;font-weight:300;line-height:1.05;font-variant-numeric:tabular-nums}
+.big .u{font-size:14px;font-weight:400;color:var(--muted);margin-left:5px}
+.ind{font-size:15px;font-weight:700;margin-left:6px}
+.legend-l{display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.lrow{display:flex;align-items:center;gap:6px;justify-content:space-between}
+.lrow>span{display:flex;align-items:center;gap:6px;min-width:0}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;flex:none}
+.bar{height:8px;border-radius:4px;background:var(--track);overflow:hidden;display:flex;gap:2px}
+.bar>i{display:block;height:100%;border-radius:4px}
+.bar.thin{height:6px}
+.bar.lg{height:12px;border-radius:6px}
+.tv{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:12.5px}
+.tv div{display:flex;flex-direction:column}
+.tv span{color:var(--muted)}
+.tv b{font-size:14px;font-weight:600}
+
+/* status (Fiori ObjectStatus, inverted) */
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;border-radius:6px;padding:2px 8px;white-space:nowrap;line-height:1.45}
+.tag.neg{color:var(--bad);background:var(--bad-soft)}
+.tag.crit{color:var(--warn);background:var(--warn-soft)}
+.tag.pos{color:var(--good);background:var(--good-soft)}
+.tag.info{color:var(--accent);background:var(--accent-soft)}
+.tag.none{color:var(--muted);background:var(--sunk)}
+.tag.sm{font-size:11px;padding:1px 6px}
+.pulse{width:7px;height:7px;border-radius:50%;background:currentColor;animation:pp 1.6s ease-in-out infinite;flex:none}
+@keyframes pp{0%,100%{opacity:1}50%{opacity:.3}}
+.count{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--muted)}
+.count.hot{color:var(--bad)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--field);background:var(--surface);color:var(--accent);font-weight:700;font-size:13.5px;cursor:pointer;transition:background .15s,transform .1s,border-color .15s}
+.btn:hover{background:var(--hover)}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--accent-fill);border-color:var(--accent-fill);color:var(--on-accent)}
+.btn.primary:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.ghost:hover{background:var(--accent-soft)}
+.btn.small{min-height:30px;padding:0 10px;font-size:12.5px}
+.btn.lg{min-height:44px;padding:0 20px;font-size:15px;border-radius:10px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+/* message strip */
+.strip{display:flex;gap:10px;align-items:flex-start;border-radius:10px;padding:10px 12px;font-size:13px;border:1px solid}
+.strip>svg{margin-top:1px}
+.strip.info{background:var(--accent-soft);border-color:var(--info-line)}
+.strip.info>svg{color:var(--accent)}
+
+/* suggest */
+.sg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.1fr);gap:16px;align-items:start}
+.trig{cursor:pointer;text-align:left;width:100%;font:inherit;color:inherit}
+.trig:hover{box-shadow:var(--shadow2);transform:translateY(-1px)}
+.trig[aria-pressed="true"]{border-color:var(--accent);box-shadow:var(--shadow2)}
+.mid{font-size:24px;font-weight:300;line-height:1.1}
+.spark{display:block;width:100%;height:46px}
+.detail{gap:16px;padding:20px}
+.detail h2.dt{font-size:22px;font-weight:700;line-height:1.2}
+.stp{display:flex;flex-direction:column;gap:12px;padding-top:16px;border-top:1px solid var(--line)}
+.stp>h3{display:flex;align-items:center;gap:10px;font-size:15px}
+.sn{width:24px;height:24px;border-radius:50%;background:var(--accent-fill);color:var(--on-accent);font-size:12.5px;font-weight:700;display:grid;place-items:center;flex:none}
+.optgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.opt{display:flex;flex-direction:column;gap:6px;text-align:left;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s}
+.opt:hover{border-color:var(--accent);box-shadow:var(--shadow)}
+.opt[aria-pressed="true"]{border:2px solid var(--accent);padding:11px;background:var(--accent-soft)}
+.opt-h{display:flex;justify-content:space-between;gap:6px;align-items:flex-start;font-size:14px}
+.opt-m{display:flex;justify-content:space-between;gap:8px;font-size:12.5px}
+.opt-m span{color:var(--muted)}
+.opt-m b{font-variant-numeric:tabular-nums}
+.tunes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.tune{display:flex;flex-direction:column;gap:5px}
+.tune-h{display:flex;justify-content:space-between;align-items:baseline;font-size:13px}
+.tune-h label{color:var(--muted)}
+.tune-h b{font-size:16px}
+input[type=range]{width:100%;accent-color:var(--accent-fill);min-height:28px;margin:0}
+.band{position:relative;height:6px;border-radius:3px;background:var(--track)}
+.band span{position:absolute;top:0;bottom:0;border-radius:3px;background:var(--cpg)}
+.band i{position:absolute;top:-3px;width:3px;height:12px;border-radius:2px;background:var(--ink);transform:translateX(-50%)}
+.outcome{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.otile{border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:3px;background:var(--sunk);min-width:0}
+.otile>span{font-size:12.5px;color:var(--muted)}
+.otile>b{font-size:24px;font-weight:300;font-variant-numeric:tabular-nums;line-height:1.15}
+.otile small{font-size:12px;color:var(--muted)}
+.otile.ret{background:var(--accent-soft)}
+.otile.cpg{background:var(--cpg-soft)}
+.otile.waste{background:var(--good-soft)}
+.schips{display:flex;flex-wrap:wrap;gap:6px}
+.schip{display:inline-flex;align-items:center;gap:5px;min-height:32px;padding:0 11px;border-radius:16px;border:1px solid var(--field);background:var(--surface);cursor:pointer;font-size:12.5px;font-weight:600;transition:opacity .15s,background .15s}
+.schip.go svg{color:var(--good)}
+.schip.care svg{color:var(--warn)}
+.schip[aria-pressed="false"]{opacity:.55;text-decoration:line-through;background:var(--sunk)}
+.notes{margin:0;padding-left:18px;font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+.checks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 18px;font-size:13px}
+.checks li{display:flex;gap:8px;align-items:center}
+.ci{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;flex:none;color:var(--on-accent)}
+.checks .ok .ci{background:var(--pos-fill)}
+.checks .no .ci{background:var(--neg-fill)}
+.sendrow{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+
+/* execute + tracker */
+.ex{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:16px;align-items:start}
+.deal{cursor:pointer}
+.deal:hover{box-shadow:var(--shadow2)}
+.deal.sel{border-color:var(--accent)}
+.miniflow{display:flex;gap:4px}
+.miniflow i{flex:1;height:5px;border-radius:3px;background:var(--track)}
+.miniflow i.done{background:var(--pos-fill)}
+.miniflow i.now{background:var(--accent-fill)}
+.miniflow i.part{background:var(--crit-fill)}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{display:inline-flex;align-items:center;gap:3px;font-size:11.5px;border-radius:6px;padding:2px 8px;border:1px solid var(--field)}
+.chip.yes{border-color:transparent;background:var(--good-soft);color:var(--good)}
+.chip.notyet{border-color:transparent;background:var(--bad-soft);color:var(--bad)}
+.pflow{list-style:none;margin:0;padding:4px 0 0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}
+.pflow li{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;min-width:0;padding:0 2px}
+.pflow li:not(:first-child)::before{content:"";position:absolute;top:17px;left:-50%;right:50%;height:3px;background:var(--track)}
+.pflow li.done::before,.pflow li.now::before,.pflow li.part::before{background:var(--pos-fill)}
+.node{position:relative;z-index:1;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--surface);border:2px solid var(--field);color:var(--muted)}
+.pflow .done .node{background:var(--pos-fill);border-color:var(--pos-fill);color:var(--on-accent)}
+.pflow .now .node{background:var(--accent-fill);border-color:var(--accent-fill);color:var(--on-accent);animation:ring 1.8s ease-out infinite}
+.pflow .part .node{background:var(--crit-fill);border-color:var(--crit-fill);color:var(--on-accent)}
+@keyframes ring{0%{box-shadow:0 0 0 0 var(--accent-ring)}100%{box-shadow:0 0 0 10px transparent}}
+.pflow b{font-size:12px}
+.pflow small{font-size:11px;color:var(--muted)}
+.tl{list-style:none;margin:0;padding:0 4px 0 0;display:flex;flex-direction:column;max-height:420px;overflow-y:auto;border-top:1px solid var(--line)}
+.tl .date{font-size:11.5px;font-weight:700;color:var(--muted);padding:12px 0 4px}
+.tl .ev{display:grid;grid-template-columns:64px 12px minmax(0,1fr);gap:10px;align-items:start;padding:5px 6px;font-size:13px;border-radius:8px}
+.tl .t{font-size:12px;color:var(--muted);text-align:right;padding-top:1px;font-variant-numeric:tabular-nums}
+.tl .dot{width:12px;height:12px;border-radius:50%;margin-top:4px;background:var(--muted);box-shadow:0 0 0 3px var(--surface)}
+.k-detect{background:var(--neg-fill)!important}
+.k-decide{background:var(--muted)!important}
+.k-approve{background:var(--pos-fill)!important}
+.k-exception{background:var(--crit-fill)!important}
+.k-launch{background:var(--ink)!important}
+.k-store{background:var(--cpg)!important}
+.k-sales{background:var(--accent-fill)!important}
+.k-agent{background:var(--avatar)!important}
+.k-end{background:var(--pos-fill)!important}
+.sys{display:inline-block;font-size:11px;font-weight:600;color:var(--muted);background:var(--sunk);border-radius:6px;padding:0 6px;margin-left:6px;white-space:nowrap}
+.ev.fresh{animation:fresh 1.6s ease-out}
+@keyframes fresh{from{background:var(--accent-soft)}to{background:transparent}}
+
+/* monitor */
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--field);border-radius:10px;overflow:hidden;align-self:flex-start;background:var(--surface)}
+.segb{min-height:36px;padding:0 14px;border:none;background:transparent;cursor:pointer;font-weight:600;font-size:13px;color:var(--ink)}
+.segb+.segb{border-left:1px solid var(--field)}
+.segb[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}
+.mgrid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;align-items:start}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.stats>div{display:flex;flex-direction:column;gap:1px;padding:10px 12px;border-radius:12px;background:var(--sunk);min-width:0}
+.stats span{font-size:12px;color:var(--muted)}
+.stats b{font-size:24px;font-weight:300;line-height:1.15;font-variant-numeric:tabular-nums}
+.stats small{font-size:11.5px;color:var(--muted)}
+.chartbox{overflow-x:auto}
+.chartbox svg{display:block;width:100%;min-width:340px;height:auto}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);flex-wrap:wrap;align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.lt{display:inline-block;width:16px;height:3px;border-radius:2px;background:var(--tick)}
+.srows{display:flex;flex-direction:column}
+.srow{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1.6fr) 74px 70px;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:13px}
+.srow:first-child{border-top:none}
+.srow .v{text-align:right;font-variant-numeric:tabular-nums}
+.sname{display:flex;flex-direction:column;gap:3px;align-items:flex-start;min-width:0}
+.bullet{position:relative;height:10px;border-radius:5px;background:var(--track)}
+.bullet>i{position:absolute;left:0;top:0;bottom:0;border-radius:5px}
+.bullet .tg{position:absolute;top:-4px;bottom:-4px;width:3px;border-radius:2px;background:var(--tick);left:83.33%}
+.rec{display:grid;grid-template-columns:38px minmax(0,1fr);gap:12px;padding:12px;border-radius:12px;background:var(--sunk)}
+.ricon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
+.rec .lever{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--accent)}
+.rec p{font-size:13px}
+.locked{display:flex;flex-direction:column;gap:6px}
+.locked div{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+.log{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
+
+/* deal room */
+.pbgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.sigs{display:flex;flex-wrap:wrap;gap:14px}
+.sig{display:flex;align-items:center;gap:8px;font-size:12.5px}
+.av{position:relative;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--on-accent);background:var(--avatar);flex:none}
+.av.b{background:var(--cpg)}
+.av .okb{position:absolute;right:-4px;bottom:-3px;width:15px;height:15px;border-radius:50%;background:var(--pos-fill);border:2px solid var(--surface);display:grid;place-items:center}
+.sig.wait .av{opacity:.45}
+.rgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.rgrid>div{background:var(--sunk);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column}
+.rgrid span{font-size:12px;color:var(--muted)}
+.rgrid b{font-size:19px;font-weight:300;font-variant-numeric:tabular-nums}
+.crow{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) 38px;gap:8px;align-items:center;font-size:12.5px}
+.crow b{text-align:right;font-variant-numeric:tabular-nums}
+details.ledger summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(--accent);min-height:24px}
+details.ledger div{font-size:12px;color:var(--muted);padding:2px 0}
+.edit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.edit label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}
+.edit input{min-height:36px;border-radius:6px;border:1px solid var(--field);background:var(--surface);padding:0 10px;color:var(--ink);font-variant-numeric:tabular-nums}
+.card.thread{border-color:var(--crit-fill)}
+.msg{display:flex;gap:8px;align-items:flex-start}
+.msg.ret{flex-direction:row-reverse}
+.bub{border-radius:14px;padding:8px 12px;font-size:13px;max-width:85%;display:flex;flex-direction:column;gap:2px}
+.msg.ret .bub{background:var(--accent-soft);border-top-right-radius:4px}
+.msg.cpgm .bub{background:var(--cpg-soft);border-top-left-radius:4px}
+.bub b{font-size:11.5px}
+.ferr{font-size:12.5px;color:var(--bad)}
+
+/* empty state */
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:48px 16px;color:var(--muted)}
+.empty .eic{width:52px;height:52px;border-radius:50%;background:var(--good-soft);color:var(--good);display:grid;place-items:center}
+.empty h3{color:var(--ink);font-size:16px}
+.empty p{max-width:46ch}
+
+/* Joule panel */
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:19}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(400px,100%);background:var(--surface);box-shadow:var(--shadow2);z-index:20;display:flex;flex-direction:column;
+  padding-top:env(safe-area-inset-top, 0px);padding-right:env(safe-area-inset-right, 0px);transform:translateX(105%);visibility:hidden;transition:transform .25s ease,visibility 0s .25s}
+.drawer.open{transform:none;visibility:visible;transition:transform .25s ease}
+.dh{display:flex;align-items:center;justify-content:space-between;padding:12px 12px 12px 16px;border-bottom:1px solid var(--line)}
+.dh b{display:flex;align-items:center;gap:8px;color:var(--accent);font-size:16px}
+.jmsgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.jq{align-self:flex-end;background:var(--accent-fill);color:var(--on-accent);border-radius:14px 14px 4px 14px;padding:8px 12px;max-width:85%;font-size:13.5px}
+.ja{align-self:flex-start;background:var(--sunk);border-radius:14px 14px 14px 4px;padding:10px 12px;max-width:94%;font-size:13.5px;line-height:1.55}
+.jsugg{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 10px}
+.jform{display:flex;gap:8px;padding:12px 16px;padding-bottom:calc(12px + env(safe-area-inset-bottom, 0px));border-top:1px solid var(--line)}
+.jform input{flex:1;min-width:0;min-height:40px;border-radius:10px;border:1px solid var(--field);background:var(--surface);padding:0 12px}
+
+/* toasts */
+.toasts{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;z-index:30;width:min(460px,calc(100% - 32px));pointer-events:none}
+.toast{pointer-events:auto;background:var(--toast-bg);color:var(--toast-ink);border-radius:12px;padding:10px 12px 10px 14px;box-shadow:var(--shadow2);display:flex;gap:10px;align-items:center;font-size:13.5px;animation:tin .25s ease-out}
+.toast.out{opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s}
+.toast .tm{flex:1}
+.toast .ti{color:var(--pos-fill)}
+.tact{border:none;background:transparent;color:var(--toast-link);font-weight:700;cursor:pointer;padding:6px 8px;border-radius:6px;white-space:nowrap}
+@keyframes tin{from{opacity:0;transform:translateY(10px)}}
+
+/* entrance motion on view change */
+.anim .bar>i,.anim .bullet>i{animation:grow .7s cubic-bezier(.2,.7,.2,1) both;transform-origin:left}
+.anim .cbar{animation:rise .7s cubic-bezier(.2,.7,.2,1) both;transform-origin:bottom;transform-box:fill-box}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+
+@media (max-width:1180px){.insights{grid-template-columns:repeat(2,minmax(0,1fr))}.mgrid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:1000px){.sg,.ex{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:900px){.app{grid-template-columns:minmax(0,1fr)}.rail{display:none}}
+@media (max-width:720px){
+  .shell{grid-template-columns:minmax(0,1fr) auto}.search{grid-column:1/-1;order:3;width:100%}
+  .optgrid,.outcome,.tunes,.checks,.edit{grid-template-columns:minmax(0,1fr)}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pflow{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:14px}.pflow li:not(:first-child)::before{display:none}
+  .srow{grid-template-columns:minmax(0,1fr) auto auto}.srow .bullet{grid-column:1/-1;order:4}
+  .ohead-in{padding:14px 14px 4px}.kvs{gap:10px 28px}
+}
+@media (max-width:560px){.insights{grid-template-columns:minmax(0,1fr)}.brand span{display:none}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="shell">
+  <div class="brand"><img class="saplogo" src="data:image/png;base64,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" alt="SAP" width="194" height="96"><div><b>Promo Pulse</b><span>SAP Fiori launchpad</span></div></div>
+  <form class="search" id="sform" role="search"><span data-ic="search" data-sz="17"></span><label for="sq" class="vh">Ask Joule or search Promo Pulse</label><input id="sq" placeholder="Ask Joule, e.g. why is yogurt at risk?" autocomplete="off"></form>
+  <div class="shell-r">
+    <button type="button" class="iconbtn jb" data-open-joule="1" aria-label="Open Joule" title="Joule"><span data-ic="sparkle" data-sz="18"></span></button>
+    <button type="button" class="iconbtn" data-q="What should I act on today?" aria-label="Notifications" title="What needs you"><span data-ic="bell" data-sz="20"></span><span class="badge" id="bellN" hidden>0</span></button>
+    <span class="avatar" title="Dana Ortiz, category manager">DO</span>
+  </div>
+</header>
+
+<div class="app">
+  <nav class="rail" id="rail" aria-label="Workspace sections"></nav>
+  <main id="main">
+    <section class="ohead" aria-label="Workspace header">
+      <div class="ohead-in">
+        <div class="row between" style="gap:12px">
+          <div class="ttl"><span class="mark" data-ic="pulse" data-sz="24"></span><div><h1>Dairy and chilled</h1><span class="muted">Promotion workspace · Dana Ortiz, category manager</span></div></div>
+          <div class="row"><span class="datechip"><span data-ic="cal" data-sz="16"></span><b id="today"></b></span><button type="button" class="btn" data-act="nextday"><span data-ic="clock" data-sz="16"></span>Simulate next day</button></div>
+        </div>
+        <div class="kvs" id="kvs"></div>
+      </div>
+      <div class="tabbar" role="tablist" aria-label="Workspace sections" id="tabbar"></div>
+    </section>
+    <section class="insights" id="kpis" aria-label="Category at a glance"></section>
+    <section id="tab-suggest" role="tabpanel" aria-labelledby="t-suggest"><div id="suggest"></div></section>
+    <section id="tab-execute" role="tabpanel" aria-labelledby="t-execute" hidden><div id="execute"></div></section>
+    <section id="tab-monitor" role="tabpanel" aria-labelledby="t-monitor" hidden><div id="monitor"></div></section>
+    <section id="tab-deals" role="tabpanel" aria-labelledby="t-deals" hidden><div id="deals"></div></section>
+  </main>
+</div>
+
+<div class="scrim" id="scrim" data-close-joule="1" hidden></div>
+<aside class="drawer" id="joule" aria-label="Joule">
+  <div class="dh"><b><span data-ic="sparkle" data-sz="17"></span>Joule</b><button type="button" class="iconbtn" data-close-joule="1" aria-label="Close Joule"><span data-ic="close" data-sz="18"></span></button></div>
+  <div class="jmsgs" id="jmsgs" aria-live="polite"></div>
+  <div class="jsugg" id="jsugg"></div>
+  <form class="jform" id="jform"><label for="jq" class="vh">Message Joule</label><input id="jq" placeholder="Ask about this workspace" autocomplete="off"><button class="btn primary" type="submit">Ask</button></form>
+</aside>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+/* ---------- icons ---------- */
+const IC={
+ pulse:'<path d="M3 12h4l2.5-6 4 12 2.5-6H21"/>',
+ bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.4 1.1 2.2h5c0-.8.4-1.6 1.1-2.2A6 6 0 0 0 12 3z"/>',
+ send:'<path d="M21 3L10 14M21 3l-7 18-4-7-7-4z"/>',
+ chart:'<path d="M5 20v-8M11 20V5M17 20v-5M3 20h18"/>',
+ doc:'<path d="M7 3h7l5 5v13H7zM14 3v5h5M10 14.5l2 2 4-4"/>',
+ bell:'<path d="M12 3.5a5.5 5.5 0 0 0-5.5 5.5v3.8L4.6 16h14.8l-1.9-3.2V9A5.5 5.5 0 0 0 12 3.5zM9.8 18.5a2.2 2.2 0 0 0 4.4 0"/>',
+ search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',
+ clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+ cal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+ check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+ x:'<path d="M7 7l10 10M17 7L7 17"/>',
+ close:'<path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>',
+ alert:'<path d="M12 4.5l8.5 15h-17zM12 10v4.5M12 17.2v.3"/>',
+ info:'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.3"/>',
+ store:'<path d="M4 9.5L5.5 4h13L20 9.5M4.5 9.5V20h15V9.5M4 9.5h16M10 20v-5h4v5"/>',
+ truck:'<path d="M3 6.5h11V16H3zM14 10h3.5l3.5 3.5V16h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>',
+ lock:'<rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>',
+ phone:'<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/>',
+ users:'<circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/>',
+ layers:'<path d="M12 4l9 5-9 5-9-5zM3 14l9 5 9-5"/>',
+ flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+ play:'<path d="M8 5.5l11 6.5-11 6.5z"/>',
+ pen:'<path d="M4 20l1-4L16 5l3 3L8 19zM14 7l3 3"/>'
+};
+function ic(n,s){s=s||18;if(n==='sparkle')return `<svg class="i" viewBox="0 0 16 16" width="${s}" height="${s}" aria-hidden="true"><path d="M8 0l1.8 6.2L16 8l-6.2 1.8L8 16l-1.8-6.2L0 8l6.2-1.8z" fill="currentColor"/></svg>`;
+  return `<svg class="i" viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]||''}</svg>`}
+
+/* ---------- data ---------- */
+const DATES=['Sun Oct 18','Mon Oct 19','Tue Oct 20','Wed Oct 21','Thu Oct 22','Fri Oct 23','Sat Oct 24','Sun Oct 25','Mon Oct 26','Tue Oct 27','Wed Oct 28','Thu Oct 29','Fri Oct 30','Sat Oct 31'];
+const STORE_NAMES=['Harbourview','Midtown Station','Maple Grove','Riverside','Kingsway','Elm Park'];
+const mk=arr=>arr.map((a,i)=>({n:STORE_NAMES[i],stock:a[0],base:a[1],display:a[2],staff:a[3]}));
+const CAUSES={demand:{label:'Demand dropped'},retailer:{label:'Retailer ordering error'},brand:{label:'Brand shipped extra'}};
+const PLAYBOOKS={
+ 'Brightfield Dairy':{contact:'Sam Patel',status:'active',ver:3,signed:'Sep 30',terms:{maxDiscount:.30,minShare:.40,maxShare:.60,maxDays:7,budget:1500},cause:{demand:.5,retailer:.4,brand:.6},used:620,pending:null,
+  ledger:['Oct 13 · Kefir 1 L, 2 for $7.00, 4 days · $210 drawn','Oct 6 · Skyr 450 g, 20% off, 5 days · $410 drawn']},
+ 'Meadowlark Oat':{contact:'Alex Kim',status:'active',ver:1,signed:'Oct 2',terms:{maxDiscount:.25,minShare:.30,maxShare:.50,maxDays:7,budget:800},cause:{demand:.45,retailer:.3,brand:.5},used:0,pending:null,ledger:[]},
+ 'Sunvale Juice':{contact:'Jordan Lee',status:'active',ver:2,signed:'Sep 12',terms:{maxDiscount:.25,minShare:.40,maxShare:.60,maxDays:7,budget:1200},cause:{demand:.5,retailer:.4,brand:.6},used:395,pending:null,
+  ledger:['Oct 14 · Chilled orange juice 1.5 L, 2 for $7.00, 7 days · $395 drawn']},
+ 'Hillcrest Creamery':{contact:'Priya Nair',status:'pending_retailer',ver:1,proposed:'Oct 17',terms:{maxDiscount:.15,minShare:.40,maxShare:.50,maxDays:7,budget:600},cause:{demand:.45,retailer:.4,brand:.5},used:0,pending:null,ledger:[]}
+};
+const TRIGGERS=[
+ {id:'yog',kind:'Near expiry',tag:'neg',kc:'var(--neg-fill)',kw:'yogurt',product:'Greek yogurt 500 g',brand:'Brightfield Dairy',approver:'Sam Patel',P:5.49,C:3.60,G:1.10,expiry:9,bb:9,cause:'demand',gapLabel:'−31% vs plan, 3 weeks',
+  facts:['S/4HANA shows 1,180 units in 6 stores, best-before Oct 27','UDF forecasts 14 a day; CAR sales are 31% below plan for 3 weeks'],
+  stores:mk([[210,14,true,3],[260,22,true,2],[180,12,false,4],[190,16,true,1],[170,13,true,3],[170,11,true,2]]),
+  options:[{id:'a',label:'25% off',d:.25,display:false},{id:'b',label:'2 for $8.00',d:1-8/(2*5.49),display:false},{id:'c',label:'Endcap display + 15% off',d:.15,display:true}],rec:'c'},
+ {id:'oat',kind:'Overstock',tag:'crit',kc:'var(--crit-fill)',kw:'oat',product:'Oat milk 1.75 L',brand:'Meadowlark Oat',approver:'Alex Kim',P:4.79,C:3.10,G:0.95,expiry:21,bb:21,cause:'retailer',gapLabel:'34 days of cover vs 14',
+  facts:['S/4HANA shows 34 days of cover against a 14-day target','A purchase order was doubled in error on Oct 9'],
+  stores:mk([[180,9,true,3],[240,15,true,2],[120,7,true,4],[150,8,true,2],[90,8,false,3],[130,6,true,1]]),
+  options:[{id:'a',label:'15% off',d:.15,display:false},{id:'b',label:'Buy 2, save $1.50',d:1.5/(2*4.79),display:false},{id:'c',label:'Shelf banner + 10% off',d:.10,display:true}],rec:'b'},
+ {id:'ched',kind:'Selling below forecast',tag:'info',kc:'var(--accent-fill)',kw:'cheddar',product:'Sliced cheddar 200 g',brand:'Hillcrest Creamery',approver:'Priya Nair',P:3.99,C:2.55,G:0.80,expiry:18,bb:18,cause:'demand',gapLabel:'−35% vs forecast, 2 weeks',
+  facts:['CAR sales are 35% below the UDF forecast for 2 weeks','S/4HANA shows 820 units in 6 stores, best-before Nov 5'],
+  stores:mk([[140,6,true,3],[170,9,true,2],[130,6,true,4],[120,5,false,1],[130,6,true,3],[130,5,true,2]]),
+  options:[{id:'a',label:'20% off',d:.20,display:false},{id:'b',label:'2 for $6.50',d:1-6.5/(2*3.99),display:false},{id:'c',label:'Deli display + 10% off',d:.10,display:true}],rec:'a'}
+];
+const R=Math.round;
+const money=n=>(n<0?'−':'')+'$'+Math.abs(R(n)).toLocaleString('en-US');
+const pct=n=>R(n*100)+'%';
+const FMT={int:v=>R(v).toLocaleString('en-US'),money:v=>money(v),pct:v=>pct(v),spct:v=>(v>=0?'+':'−')+Math.abs(R(v*100))+'%'};
+function esc(t){return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function noise(i,d){return 0.88+((i*37+d*23)%25)/100}
+const short=p=>p.replace(/\s[\d.]+\s?(g|L)$/,'');
+const initials=n=>n.split(' ').map(w=>w[0]).join('').slice(0,2);
+
+/* ---------- state ---------- */
+const TABS=[['suggest','Suggest','bulb'],['execute','Execute','send'],['monitor','Monitor','chart'],['deals','Deal room','doc']];
+const TAB_IDS=TABS.map(t=>t[0]);
+const S={today:0,sel:'yog',draft:{},deals:[],monitorSel:'juice',tab:'suggest',editing:null,editErr:null,editVals:null,trackSel:'juice',clock:540,seq:0,nums:{},first:true,jlog:[],animT:null};
+try{const h=location.hash.slice(1),saved=localStorage.getItem('pp-tab');S.tab=TAB_IDS.includes(h)?h:(TAB_IDS.includes(saved)?saved:'suggest')}catch(e){}
+TRIGGERS.forEach(t=>S.draft[t.id]={opt:t.rec,days:5,share:causeShare(t),exclude:{}});
+S.deals.push({id:'juice',trig:{id:'juice',kind:'Overstock',product:'Chilled orange juice 1.5 L',brand:'Sunvale Juice',approver:'Jordan Lee',P:4.29,C:2.80,G:0.85,expiry:null},
+  opt:{label:'2 for $7.00',d:1-7/(2*4.29),display:false},days:7,share:.5,status:'live',startDay:-3,
+  stores:mk([[140,14,true,3],[90,24,true,2],[160,12,true,4],[150,16,true,1],[130,13,true,3],[260,9,true,2]]).map(st=>({...st,start:st.stock,remaining:st.stock,conf:st.staff>=2?-4:null,nudged:null,hist:[]})),
+  offer:null,dismissed:{},done:{},events:[],auto:true,fund:395,pbVer:2,thread:[],track:[],created:-4});
+const J=S.deals[0];
+log(J,'detect','Overstock flagged: 930 units across 6 stores, above target cover','S/4HANA + UDF',-4,425);
+log(J,'decide','Dana picked 2 for $7.00, 7 days, Sunvale Juice funds 50%','Promo Pulse',-4,550);
+log(J,'approve','Inside all 4 playbook rules. Auto-approved under v2, $395 committed','Trade Mgmt',-4,550);
+log(J,'launch','Promotion created, '+dateOf(-3)+' to '+dateOf(3),'PMR',-4,554);
+log(J,'launch','Price 2 for $7.00 pushed to 6 stores','OPP',-4,555);
+log(J,'launch','Set-up tasks sent to 6 store apps','Store app',-4,555);
+J.stores.filter(x=>x.conf!=null).forEach((x,i)=>log(J,'store',x.n+' confirmed set-up · shelf photo','Store app',-4,940+i*23));
+log(J,'agent','Riverside still hasn’t confirmed set-up. Flagged in Monitor','Promo Pulse',-3,480);
+for(let d=-3;d<=0;d++)simDay(J,d);
+J.track.forEach(e=>e.at=0);
+
+/* ---------- model ---------- */
+function openT(){return TRIGGERS.filter(t=>!S.deals.some(d=>d.id===t.id))}
+function liftOf(st,o,executed,boost){return 1+(3.6*o.d+((o.display&&st.display)?0.6:0))*(executed?1:0.3)+(boost||0)}
+function storePlan(st,o,D,P,C,G,share,expiry){
+  const L=liftOf(st,o,true),baseU=Math.min(st.stock,st.base*D),promoU=Math.min(st.stock,st.base*L*D),incr=promoU-baseU;
+  let w0=0,w1=0;if(expiry){w0=Math.max(0,st.stock-st.base*expiry);w1=Math.max(0,st.stock-st.base*L*D-st.base*Math.max(0,expiry-D))}
+  const fund=promoU*P*o.d*share;
+  return {promoU,incr,wasteAvoid:w0-w1,waste0:w0,fund,ret:promoU*(P*(1-o.d)-C)+fund-baseU*(P-C)+(w0-w1)*C,cpg:incr*G-fund};
+}
+function trigPlan(t,dr,optId){const o=t.options.find(x=>x.id===(optId||dr.opt));let a={promoU:0,incr:0,wasteAvoid:0,waste0:0,fund:0,ret:0,cpg:0};
+  t.stores.filter(st=>!dr.exclude[st.n]).forEach(st=>{const c=storePlan(st,o,dr.days,t.P,t.C,t.G,dr.share,t.expiry);for(const k in a)a[k]+=c[k]});return a}
+function atRisk(t){const days=t.kind==='Overstock'?14:t.expiry;return t.stores.reduce((s,st)=>s+Math.max(0,st.stock-st.base*days),0)}
+function daysLeft(t){return Math.max(0,t.bb-S.today)}
+function readiness(t,dr){const o=t.options.find(x=>x.id===dr.opt);return t.stores.map(st=>{const iss=[];const need=st.base*liftOf(st,o,true)*dr.days;
+  if(o.display&&!st.display)iss.push('No display space, runs price-only');
+  if(st.stock<need*0.6)iss.push('Stock covers only part of the promotion');
+  if(st.staff<2)iss.push('Only 1 staff hour free for set-up');
+  return {st,iss,verdict:iss.length?'care':'go'}})}
+function pbActive(pb){return !!pb&&(pb.status==='active'||pb.status==='pending_brand')}
+function causeShare(t){const pb=PLAYBOOKS[t.brand];if(!pb)return .5;const s=pb.cause[t.cause]??.5;return Math.min(pb.terms.maxShare,Math.max(pb.terms.minShare,s))}
+function playbook(dr,o,t){
+  const pb=PLAYBOOKS[t.brand];
+  if(!pbActive(pb))return [[false,pb?`${t.brand} playbook is proposed but not signed (Deal room)`:`No playbook with ${t.brand}`]];
+  const T=pb.terms,fund=trigPlan(t,dr).fund,left=T.budget-pb.used;
+  return [[o.d<=T.maxDiscount+1e-9,`Discount ${pct(o.d)}, limit ${pct(T.maxDiscount)}`],[dr.share>=T.minShare-1e-9&&dr.share<=T.maxShare+1e-9,`Brand funds ${pct(dr.share)}, allowed ${pct(T.minShare)}–${pct(T.maxShare)}`],[dr.days<=T.maxDays,`${dr.days} days, limit ${T.maxDays}`],[fund<=left,`Funding ${money(fund)}, ${money(left)} left this month`]];
+}
+function series(t){const base=t.stores.reduce((s,st)=>s+st.base,0),pts=[];
+  for(let i=0;i<21;i++){let a=base*(0.95+((i*13)%9)/100);
+    if(t.id==='yog')a=base*(1-.31*Math.min(1,(i+4)/8))*(0.95+((i*7)%9)/100);
+    if(t.id==='ched'&&i>=7)a=base*(1-.35*Math.min(1,(i-6)/5))*(0.95+((i*5)%9)/100);
+    pts.push({plan:base,a})}return pts}
+function dayIdx(deal,abs){return abs-deal.startDay+1}
+function simDay(deal,abs){
+  const dn=dayIdx(deal,abs);if(dn<1||dn>deal.days)return;
+  deal.stores.forEach((st,i)=>{
+    const ex=st.conf!=null&&st.conf<abs;
+    const boost=(deal.offer&&deal.offer.from<=abs&&deal.offer.stores.includes(st.n))?0.12:0;
+    const f=st.base*liftOf(st,deal.opt,true);
+    const want=st.base*liftOf(st,deal.opt,ex,boost)*noise(i,dn);
+    const a=Math.min(st.remaining,want);
+    st.remaining-=a;st.hist.push({dn,f,a,ex,short:want-a});
+  });
+  let tf=0,ta=0;deal.stores.forEach(st=>{const h=st.hist[st.hist.length-1];if(h&&h.dn===dn){tf+=h.f;ta+=h.a}});
+  log(deal,'sales',`Day ${dn}: ${R(ta)} sold vs ${R(tf)} forecast`,'CAR',abs,1260);
+}
+function launch(deal){
+  deal.status='live';deal.startDay=S.today+1;
+  const ld=S.today,n=deal.stores.length,weakest=deal.stores.slice().sort((a,b)=>a.staff-b.staff)[0];
+  deal.stores.forEach(st=>{st.start=st.stock;st.remaining=st.stock;st.hist=[];st.nudged=null;st.conf=null});
+  deal.offer=null;deal.dismissed={};deal.done={};deal.events=[];
+  S.monitorSel=deal.id;S.trackSel=deal.id;
+  log(deal,'launch',`Promotion created, ${dateOf(deal.startDay)} to ${dateOf(deal.startDay+deal.days-1)}`,'PMR');
+  later(500,()=>log(deal,'launch',`Price ${deal.opt.label} pushed to ${n} store${n>1?'s':''}`,'OPP'));
+  later(1000,()=>log(deal,'launch',`Set-up tasks sent to ${n} store app${n>1?'s':''}${deal.opt.display?', with display instructions':''}`,'Store app'));
+  deal.stores.filter(st=>st.n!==weakest.n).forEach((st,i)=>later(1700+i*600,()=>{st.conf=ld;log(deal,'store',`${st.n} confirmed set-up · shelf photo`,'Store app')}));
+}
+function later(ms,fn){setTimeout(()=>{fn();render()},ms)}
+function dateOf(i){const x=new Date(2026,9,18+i);return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][x.getDay()]+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][x.getMonth()]+' '+x.getDate()}
+function fmtTime(m){const h=Math.floor(m/60),mm=m%60;return `${((h+11)%12)+1}:${String(mm).padStart(2,'0')} ${h>=12?'pm':'am'}`}
+function log(deal,step,text,sys,abs,m){if(!deal.track)deal.track=[];if(abs==null)abs=S.today;if(m==null){S.clock=Math.min(S.clock+2,1250);m=S.clock}deal.track.push({abs,m,step,text,sys,seq:++S.seq,at:Date.now()})}
+function sortedTrack(d){return d.track.slice().sort((a,b)=>a.abs-b.abs||a.m-b.m||a.seq-b.seq)}
+function liveDay(deal){return Math.max(0,Math.min(deal.days,S.today-deal.startDay+1))}
+function stageList(d){
+  const st=d.status,n=d.stores.length,conf=d.stores.filter(s=>s.conf!=null).length,live=st==='live'||st==='done',dn=live?liveDay(d):0,ok=['approved','live','done'].includes(st);
+  return [
+   ['Detected','done',dateOf(d.created??S.today)],
+   ['Approved',ok?'done':'now',st==='negotiate'?'Exception open':d.auto?'Auto, at send':'In Deal room'],
+   ['Live in SAP',live?'done':ok?'now':'',live?'PMR + OPP':ok?'Ready to launch':''],
+   ['Stores set up',!live?'':conf===n?'done':st==='done'?'part':'now',live?`${conf} of ${n}`:''],
+   ['Selling',st==='done'?'done':live&&dn>=1?'now':'',live?(dn>=1?`Day ${dn} of ${d.days}`:`From ${dateOf(d.startDay)}`):''],
+   ['Ended',st==='done'?'done':'',d.startDay!=null?dateOf(d.startDay+d.days-1):'']
+  ];
+}
+function recs(deal){
+  if(deal.status!=='live')return [];
+  const dn=liveDay(deal),left=deal.days-dn,out=[];if(dn<1)return out;
+  deal.stores.forEach(st=>{
+    if(st.conf==null&&st.nudged==null)out.push({id:'nudge-'+st.n,lever:'Store execution',store:st.n,text:`${st.n} hasn’t confirmed set-up after ${dn} day${dn>1?'s':''}. Nudge the store and pause replenishment of this item until it does.`,act:'Nudge and pause'});
+  });
+  if(left>0){
+    const rate=st=>st.base*liftOf(st,deal.opt,true);
+    const short=deal.stores.filter(st=>st.conf!=null&&st.remaining<rate(st)*left*0.8).map(st=>({st,need:R(rate(st)*left-st.remaining)})).filter(x=>x.need>=15);
+    const surplus=deal.stores.map(st=>({st,spare:R(st.remaining-rate(st)*left*1.1)})).filter(x=>x.spare>15).sort((a,b)=>b.spare-a.spare);
+    short.forEach(({st,need})=>{
+      const donor=surplus.find(x=>x.st.n!==st.n&&x.spare>=15);
+      if(donor){const q=Math.min(need,donor.spare);out.push({id:'move-'+st.n,lever:'Stock between stores',store:st.n,text:`${st.n} sells out in about ${Math.max(1,R(st.remaining/rate(st)))} day${R(st.remaining/rate(st))>1?'s':''}. Move ${q} units from ${donor.st.n}, which won’t sell them before the promotion ends.`,act:`Move ${q} units`,q,from:donor.st.n,to:st.n});donor.spare-=q;}
+      else out.push({id:'exp-'+st.n,lever:'Expedite from DC',store:st.n,text:`${st.n} sells out early and no store has spare stock. Expedite ${need} units from the distribution centre.`,act:`Expedite ${need}`,q:need,to:st.n});
+    });
+    const cumF=deal.stores.reduce((s,st)=>s+st.hist.reduce((x,h)=>x+h.f,0),0),cumA=deal.stores.reduce((s,st)=>s+st.hist.reduce((x,h)=>x+h.a,0),0);
+    if(!deal.offer&&cumA<cumF*0.88){
+      const slow=deal.stores.filter(st=>{const f=st.hist.reduce((x,h)=>x+h.f,0),a=st.hist.reduce((x,h)=>x+h.a,0),sh=st.hist.reduce((x,h)=>x+h.short,0);return a<f*0.92&&st.conf!=null&&sh<1}).map(st=>st.n);
+      if(slow.length)out.push({id:'offer',lever:'Digital offer',text:`${slow.join(', ')} set up the promotion and have stock, but sales are below forecast. Send the deal to loyalty-app shoppers of ${slow.length>1?'those stores':'that store'} through Engagement Cloud.`,act:'Send app offer',stores:slow});
+    }
+  } else out.push({id:'wave',lever:'Next wave',text:'The promotion ends today. Repeat it in the stores that beat forecast, and skip the stores that didn’t set up.',act:'Plan next wave'});
+  return out.filter(r=>!deal.dismissed[r.id]&&!deal.done[r.id]);
+}
+function dealTotals(deal){
+  let f=0,a=0,fEx=0,aEx=0;
+  deal.stores.forEach(st=>st.hist.forEach(h=>{f+=h.f;a+=h.a;if(st.conf!=null){fEx+=h.f;aEx+=h.a}}));
+  const p=deal.trig,o=deal.opt;
+  return {f,a,fEx,aEx,profitPlan:f*(p.P*(1-o.d)-p.C)+f*p.P*o.d*deal.share,profitAct:a*(p.P*(1-o.d)-p.C)+a*p.P*o.d*deal.share};
+}
+
+/* ---------- deal room ---------- */
+const dayLabel=()=>dateOf(S.today).slice(4);
+const slug=b=>b.toLowerCase().replace(/[^a-z]+/g,'-');
+function commitFunding(deal){const pb=PLAYBOOKS[deal.trig.brand];if(!pb||!deal.fund)return;pb.used+=deal.fund;pb.ledger.unshift(`${dayLabel()} · ${deal.trig.product}, ${deal.opt.label}, ${deal.days} days · ${money(deal.fund)} drawn`)}
+function replan(deal){let f=0,w=0;deal.stores.forEach(st=>{const c=storePlan(st,deal.opt,deal.days,deal.trig.P,deal.trig.C,deal.trig.G,deal.share,deal.trig.expiry);f+=c.fund;w+=c.wasteAvoid});deal.fund=f;deal.wastePlan=w}
+function counter(deal){
+  const t=deal.trig,pb=PLAYBOOKS[t.brand],T=pb?pb.terms:{maxDiscount:.2,minShare:.3,maxShare:.5,maxDays:7};
+  const d=Math.min(deal.opt.d,T.maxDiscount),share=Math.min(T.maxShare,Math.max(T.minShare,deal.share)),days=Math.min(deal.days,T.maxDays);
+  const capped=d<deal.opt.d-1e-9;
+  const opt=capped?{...deal.opt,d,label:/\d+% off/.test(deal.opt.label)?deal.opt.label.replace(/\d+% off/,pct(d)+' off'):pct(d)+' off'}:deal.opt;
+  const ch=[];if(capped)ch.push(`the discount capped at ${pct(d)}`);if(Math.abs(share-deal.share)>1e-9)ch.push(`our share at ${pct(share)}`);if(days!==deal.days)ch.push(`${days} days`);
+  const pre=pbActive(pb)?'':'We don’t have a signed playbook yet, so this one goes deal by deal. ';
+  deal.counterTerms={opt,share,days};
+  log(deal,'exception',`${t.approver} countered: ${ch.length?ch.join(', '):'will fund as asked'}`,'Trade Mgmt');
+  deal.thread.push({who:'cpg',name:t.approver+', '+t.brand,text:pre+(ch.length?`We’ll fund it with ${ch.join(', ')}. ${pbActive(pb)?'That keeps it inside the terms we’ve agreed.':'That matches the playbook we sent you.'}`:'We’ll fund this one as asked.')});
+  toast(`${t.approver} countered on ${short(t.product).toLowerCase()}`,{label:'Review',fn:()=>setTab('deals')});
+}
+function acceptCounter(deal){const c=deal.counterTerms;deal.opt=c.opt;deal.share=c.share;deal.days=c.days;replan(deal);deal.status='approved';deal.auto=false;deal.approvedAt=dayLabel();deal.counterTerms=null;commitFunding(deal);S.trackSel=deal.id;
+  log(deal,'approve',`Dana accepted the counter. ${deal.fund?money(deal.fund)+' committed':'Retailer-funded'}`,'Trade Mgmt');
+  toast('Counter accepted. Ready to launch',{label:'Launch now',fn:()=>doLaunch(deal)})}
+function runSolo(deal){deal.share=0;replan(deal);deal.status='approved';deal.auto=false;deal.approvedAt=dayLabel()+', retailer-funded';deal.counterTerms=null;S.trackSel=deal.id;
+  log(deal,'approve','Dana chose to run it retailer-funded','Promo Pulse');toast('Running it retailer-funded. Ready to launch',{label:'Launch now',fn:()=>doLaunch(deal)})}
+function proposeTerms(b){
+  const pb=PLAYBOOKS[b],id=slug(b),v=k=>parseFloat(($(`e-${id}-${k}`)||{}).value);
+  const n={maxDiscount:v('max')/100,maxDays:R(v('days')),minShare:v('min')/100,maxShare:v('maxs')/100,budget:R(v('fund'))};
+  let err=null;
+  if(Object.values(n).some(x=>!isFinite(x)))err='Fill in every field, then send again.';
+  else if(n.maxDiscount<=0||n.maxDiscount>.5)err='Max discount has to be between 5% and 50%.';
+  else if(n.maxDays<1||n.maxDays>14)err='Max length has to be 1 to 14 days.';
+  else if(n.minShare<0||n.maxShare>1)err='Brand shares have to be between 0% and 100%.';
+  else if(n.minShare>n.maxShare)err='“Brand funds at least” is higher than “at most”. Lower one of them.';
+  else if(n.budget<0)err='The monthly fund can’t be negative.';
+  if(err){S.editErr=err;S.editVals=null;return}
+  S.editErr=null;S.editing=null;S.editVals=null;pb.pending=n;pb.status='pending_brand';
+  toast(`New terms sent to ${pb.contact}`);
+  later(1600,()=>{pb.terms=pb.pending;pb.pending=null;pb.ver++;pb.signed=dayLabel();pb.status='active';toast(`${pb.contact} signed ${b} playbook v${pb.ver}`)});
+}
+function doLaunch(deal){if(deal.status!=='approved')return;launch(deal);if(S.tab!=='execute')setTab('execute');render();toast(`Live in PMR and OPP from ${dateOf(deal.startDay)}. Store confirmations are coming in.`)}
+
+/* ---------- small renderers ---------- */
+function numEl(k,v,f){return `<span data-num="${v}" data-key="${k}" data-fmt="${f}">${FMT[f](v)}</span>`}
+function empty(title,text,btn){return `<div class="card"><div class="empty"><span class="eic">${ic('check',24)}</span><h3>${esc(title)}</h3><p>${esc(text)}</p>${btn||''}</div></div>`}
+function spark(t){const pts=series(t),W=240,H=46,max=Math.max(...pts.map(p=>Math.max(p.plan,p.a)))*1.12,x=i=>i/(pts.length-1)*W,y=v=>H-2-(H-6)*v/max;
+  const path=k=>pts.map((p,i)=>`${i?'L':'M'}${x(i).toFixed(1)},${y(p[k]).toFixed(1)}`).join('');const a=path('a');
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Sales against plan over the last 3 weeks"><path d="${a}L${W},${H}L0,${H}Z" fill="var(--accent-soft)"/><path d="${path('plan')}" fill="none" stroke="var(--muted)" stroke-width="1.3" stroke-dasharray="4 3" vector-effect="non-scaling-stroke"/><path d="${a}" fill="none" stroke="var(--accent-fill)" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`}
+
+/* ---------- header, KPIs, tabs ---------- */
+function tabCounts(){const open=openT().length,waiting=S.deals.filter(d=>d.status==='approved'||(d.status==='live'&&d.stores.some(s=>s.conf==null))).length,
+  recN=S.deals.filter(d=>d.status==='live').reduce((n,d)=>n+recs(d).length,0),
+  dealsN=S.deals.filter(d=>d.status==='negotiate').length+Object.values(PLAYBOOKS).filter(p=>p.status==='pending_retailer').length;
+  return {suggest:open,execute:waiting,monitor:recN,deals:dealsN,total:open+waiting+recN+dealsN}}
+function renderTabs(){const c=tabCounts();
+  $('tabbar').innerHTML=TABS.map(([id,l,icn])=>`<button type="button" role="tab" id="t-${id}" aria-controls="tab-${id}" aria-selected="${S.tab===id}" tabindex="${S.tab===id?0:-1}" data-tab="${id}">${ic(icn,17)}${l}<span class="cnt ${c[id]?'hot':''}">${c[id]}</span></button>`).join('');
+  $('rail').innerHTML=TABS.map(([id,l,icn])=>`<button type="button" class="rb" data-tab="${id}" aria-current="${S.tab===id?'page':'false'}" aria-label="${l}${c[id]?`, ${c[id]} need you`:''}" title="${l}">${ic(icn,20)}${c[id]?`<span class="dotb">${c[id]}</span>`:''}</button>`).join('')+
+    `<span class="rail-sep"></span><button type="button" class="rb" data-open-joule="1" aria-label="Open Joule" title="Joule" style="color:var(--accent)">${ic('sparkle',18)}</button>`;
+  TABS.forEach(([id])=>{$('tab-'+id).hidden=S.tab!==id});
+  const bn=$('bellN');bn.textContent=c.total;bn.hidden=!c.total;
+  const signed=Object.values(PLAYBOOKS).filter(pbActive).length,toSign=Object.values(PLAYBOOKS).filter(p=>p.status==='pending_retailer').length;
+  $('kvs').innerHTML=`<div><span>Needs you</span><b>${c.total} item${c.total===1?'':'s'}</b></div><div><span>Stores</span><b>6 stores</b></div><div><span>Brand playbooks</span><b>${signed} signed${toSign?`, ${toSign} to sign`:''}</b></div><div><span>Data</span><b>S/4HANA, CAR, UDF</b></div><div><span>Last sync</span><b>${dateOf(S.today).slice(4)}, 7:05 am</b></div>`;
+  $('today').textContent=dateOf(S.today);
+}
+function renderKpis(){
+  const open=openT(),risk=open.reduce((s,t)=>s+atRisk(t),0),live=S.deals.filter(d=>d.status==='live');
+  let pp=0,pa=0,waste=0;S.deals.forEach(d=>{if(d.status==='live'||d.status==='done'){const t=dealTotals(d);pp+=t.profitPlan;pa+=t.profitAct}if(d.wastePlan)waste+=d.wastePlan*Math.min(1,liveDay(d)/d.days)});
+  const vs=pp?pa/pp-1:0,waiting=S.deals.filter(d=>d.status==='approved'||d.status==='negotiate').length;
+  $('kpis').innerHTML=`
+  <div class="card"><div class="card-h"><div><h3>At-risk units</h3><small>Open triggers</small></div><span class="tag ${open.length?'neg':'pos'}">${open.length} open</span></div>
+    <div class="big">${numEl('kpi-risk',risk,'int')}<span class="u">units</span></div>
+    <div class="bar">${open.map(t=>`<i style="width:${risk?atRisk(t)/risk*100:0}%;background:${t.kc}"></i>`).join('')}</div>
+    <div class="legend-l">${open.map(t=>`<div class="lrow"><span><i class="sw" style="background:${t.kc}"></i>${esc(short(t.product))}</span><b class="num">${R(atRisk(t))}</b></div>`).join('')||'<span class="muted">Nothing at risk right now</span>'}</div></div>
+  <div class="card"><div class="card-h"><div><h3>Promotions</h3><small>Live now</small></div>${waiting?`<span class="tag info">${waiting} waiting</span>`:''}</div>
+    <div class="big">${numEl('kpi-live',live.length,'int')}<span class="u">live</span></div>
+    <div class="legend-l">${live.map(d=>{const dn=liveDay(d);return `<div class="col" style="gap:4px"><div class="lrow"><span>${esc(short(d.trig.product))}</span><span class="muted">${dn?`Day ${dn} of ${d.days}`:'Starts '+dateOf(d.startDay).slice(4)}</span></div><span class="bar thin"><i style="width:${dn/d.days*100}%;background:var(--accent-fill)"></i></span></div>`}).join('')||'<span class="muted">Launch one from Execute</span>'}</div></div>
+  <div class="card"><div class="card-h"><div><h3>Waste avoided</h3><small>Near-expiry promotions, to date</small></div></div>
+    <div class="big">${numEl('kpi-waste',waste,'int')}<span class="u">units</span></div>
+    <div class="bar"><i style="width:${waste+risk?waste/(waste+risk)*100:0}%;background:var(--pos-fill)"></i></div>
+    <span class="small muted">${waste?`${pct(waste/(waste+risk))} of the stock at risk is now covered`:'Counts once a near-expiry promotion is live'}</span></div>
+  <div class="card"><div class="card-h"><div><h3>Profit vs plan</h3><small>Live promotions, to date</small></div></div>
+    <div class="big ${vs<-0.05?'neg':vs>0.02?'pos-t':''}">${numEl('kpi-vs',vs,'spct')}<span class="ind">${vs<-0.005?'▼':vs>0.005?'▲':''}</span></div>
+    <div class="tv"><div><span>Actual</span><b class="num">${money(pa)}</b></div><div><span>Plan</span><b class="num">${money(pp)}</b></div><div><span>Gap</span><b class="num ${pa<pp?'neg':''}">${money(pa-pp)}</b></div></div></div>`;
+}
+
+/* ---------- suggest ---------- */
+function causeLine(t){const pb=PLAYBOOKS[t.brand];if(!pb||!t.cause)return '';return `<div class="strip info">${ic('info',18)}<span><b>Cause: ${esc(CAUSES[t.cause].label)}.</b> The ${esc(t.brand)} playbook${pb.status==='pending_retailer'?' (not signed yet)':''} sets the brand’s share at ${pct(causeShare(t))} for this cause, so the slider starts there.</span></div>`}
+function trigCard(t){const dl=daysLeft(t),sel=t.id===S.sel;
+  return `<button type="button" class="card trig" data-sel="${t.id}" aria-pressed="${sel}">
+    <div class="row between"><span class="tag ${t.tag}">${esc(t.kind)}</span><span class="count ${dl<=10?'hot':''}">${ic('clock',14)}${dl} days left</span></div>
+    <div><h3>${esc(t.product)}</h3><span class="small muted">${esc(t.brand)}</span></div>
+    <div class="row between" style="align-items:flex-end"><div><span class="mid num">${R(atRisk(t)).toLocaleString('en-US')}</span> <span class="small muted">units at risk</span></div><span class="small ${t.gapLabel.startsWith('−')?'neg':'crit-t'}">${esc(t.gapLabel)}</span></div>
+    ${spark(t)}
+  </button>`}
+function tune(id,label,valTxt,min,max,step,val,bandL,bandW,mark,note){
+  return `<div class="tune"><div class="tune-h"><label for="${id}">${label}</label><b class="num" id="${id}-v">${valTxt}</b></div>
+    <input id="${id}" type="range" min="${min}" max="${max}" step="${step}" value="${val}">
+    <div class="band" aria-hidden="true"><span style="left:${bandL}%;width:${bandW}%"></span><i style="left:${mark}%"></i></div><span class="small muted">${note}</span></div>`}
+function detail(t){
+  const dr=S.draft[t.id],o=t.options.find(x=>x.id===dr.opt),a=trigPlan(t,dr),rd=readiness(t,dr),pbc=playbook(dr,o,t),inPb=pbc.every(x=>x[0]),pb=PLAYBOOKS[t.brand],act=pbActive(pb),T=pb?pb.terms:null;
+  const nIn=t.stores.filter(st=>!dr.exclude[st.n]).length,broken=pbc.filter(x=>!x[0]).length,stock=t.stores.reduce((s,st)=>s+st.stock,0);
+  const opts=t.options.map(op=>{const x=trigPlan(t,dr,op.id),over=act&&op.d>T.maxDiscount+1e-9;
+    return `<button type="button" class="opt" data-opt="${op.id}" aria-pressed="${dr.opt===op.id}">
+      <span class="opt-h"><b>${esc(op.label)}</b>${op.id===t.rec?'<span class="tag pos sm">Recommended</span>':''}</span>
+      <span class="opt-m"><span>Retailer</span><b class="${x.ret<0?'neg':''}">${money(x.ret)}</b></span>
+      <span class="opt-m"><span>${esc(t.brand.split(' ')[0])}</span><b class="${x.cpg<0?'neg':''}">${money(x.cpg)}</b></span>
+      <span class="opt-m"><span>Saved</span><b>${R(x.wasteAvoid)} units</b></span>
+      <span class="bar thin"><i style="width:${x.waste0?x.wasteAvoid/x.waste0*100:0}%;background:var(--pos-fill)"></i></span>
+      ${over?`<span class="small crit-t">Over the ${pct(T.maxDiscount)} playbook limit</span>`:''}
+    </button>`}).join('');
+  const dayBand=act?tune('days','Duration',`${dr.days} days`,3,10,1,dr.days,0,(T.maxDays-3)/7*100,(dr.days-3)/7*100,`Playbook allows up to ${T.maxDays} days`):tune('days','Duration',`${dr.days} days`,3,10,1,dr.days,0,0,(dr.days-3)/7*100,'No signed limit yet');
+  const shareBand=pb?tune('share','Brand funds',pct(dr.share),0,100,5,R(dr.share*100),T.minShare*100,(T.maxShare-T.minShare)*100,dr.share*100,`${act?'Playbook allows':'Proposed terms allow'} ${pct(T.minShare)}–${pct(T.maxShare)}`):tune('share','Brand funds',pct(dr.share),0,100,5,R(dr.share*100),0,0,dr.share*100,'No playbook with this brand');
+  const care=rd.filter(r=>r.iss.length&&!dr.exclude[r.st.n]);
+  return `<div class="card detail">
+    <div class="row between"><div class="row"><span class="tag ${t.tag}">${esc(t.kind)}</span><span class="small muted">${esc(t.brand)}</span></div><button type="button" class="btn ghost small" data-q="Why is ${t.kw} at risk?">${ic('sparkle',14)}Why is this happening?</button></div>
+    <h2 class="dt">${esc(t.product)}</h2>
+    <div class="kvs sm"><div><span>Stock</span><b class="num">${stock.toLocaleString('en-US')} units</b></div><div><span>At risk</span><b class="num neg">${R(atRisk(t)).toLocaleString('en-US')} units</b></div><div><span>Best-before</span><b>${dateOf(t.bb).slice(4)} · ${daysLeft(t)} days</b></div><div><span>Signal</span><b>${esc(t.gapLabel)}</b></div></div>
+    ${causeLine(t)}
+    <section class="stp"><h3><span class="sn">1</span>Pick a promotion</h3><div class="optgrid">${opts}</div></section>
+    <section class="stp"><h3><span class="sn">2</span>Tune it</h3>
+      <div class="tunes">${dayBand}${shareBand}</div>
+      <div class="outcome">
+        <div class="otile ret"><span>Retailer, vs no promotion</span><b class="${a.ret<0?'neg':''}">${numEl('o-ret',a.ret,'money')}</b><small>${R(a.promoU)} units sold</small></div>
+        <div class="otile cpg"><span>${esc(t.brand)}</span><b class="${a.cpg<0?'neg':''}">${numEl('o-cpg',a.cpg,'money')}</b><small>${money(a.fund)} funding</small></div>
+        <div class="otile waste"><span>Waste avoided</span><b>${numEl('o-w',a.wasteAvoid,'int')} <small>units</small></b><span class="bar thin"><i style="width:${a.waste0?a.wasteAvoid/a.waste0*100:0}%;background:var(--pos-fill)"></i></span><small>of ${R(a.waste0)} that would expire</small></div>
+      </div>
+      <div class="col" style="gap:8px"><span class="lbl">Stores · ${nIn} of ${t.stores.length} included, tap to leave one out</span>
+        <div class="schips">${rd.map(r=>`<button type="button" class="schip ${r.verdict}" data-inc="${esc(r.st.n)}" aria-pressed="${!dr.exclude[r.st.n]}" title="${esc(r.iss.join('; ')||'Ready')}">${ic(r.verdict==='go'?'check':'alert',14)}${esc(r.st.n)}</button>`).join('')}</div>
+        ${care.length?`<ul class="notes">${care.map(r=>`<li><b>${esc(r.st.n)}:</b> ${esc(r.iss.join('; '))}</li>`).join('')}</ul>`:''}</div>
+    </section>
+    <section class="stp"><h3><span class="sn">3</span>Check and send</h3>
+      <div>${inPb?`<span class="tag pos">${ic('check',14)}Inside the ${esc(t.brand)} playbook v${pb.ver}</span>`:`<span class="tag crit">${ic('alert',14)}${broken} rule${broken>1?'s':''} outside the playbook</span>`}</div>
+      <ul class="checks">${pbc.map(x=>`<li class="${x[0]?'ok':'no'}"><span class="ci">${ic(x[0]?'check':'x',12)}</span>${esc(x[1])}</li>`).join('')}</ul>
+      <div class="sendrow"><button type="button" class="btn primary lg" data-act="send" ${nIn?'':'disabled'}>${ic('send',17)}${inPb?'Send and auto-approve':'Send to '+esc(t.approver)+' as an exception'}</button>
+        <span class="small muted">${inPb?'No email. It’s approved the moment you send, and the brand’s share is drawn from the playbook fund.':'This opens one thread in the Deal room instead of an email chain.'}</span></div>
+    </section>
+  </div>`;
+}
+function renderSuggest(){
+  const el=$('suggest'),open=openT();
+  if(!open.length){el.innerHTML=empty('All caught up','No open triggers. New ones arrive each morning from SAP stock, sales and forecast.',`<button type="button" class="btn" data-tab="execute">Go to Execute</button>`);return}
+  if(!open.some(t=>t.id===S.sel))S.sel=open[0].id;
+  el.innerHTML=`<div class="sg"><div class="col" style="gap:12px"><div class="sec-h"><h2>Today’s triggers</h2><span class="small muted">${open.length} need a decision</span></div>${open.map(trigCard).join('')}
+    <span class="small muted" style="padding:0 4px"><span style="color:var(--accent-fill)">━</span> Sales &nbsp;<span>┅</span> Plan, last 3 weeks</span></div>
+    <div class="col">${detail(TRIGGERS.find(t=>t.id===S.sel))}</div></div>`;
+  bindRanges();
+}
+
+/* ---------- execute ---------- */
+function dealTag(d){const st=d.status;
+  if(st==='negotiate')return '<span class="tag crit">Exception</span>';
+  if(st==='approved')return '<span class="tag info">Ready to launch</span>';
+  if(st==='live')return `<span class="tag pos"><span class="pulse"></span>Live</span>`;
+  return '<span class="tag none">Ended</span>'}
+function dealCard(d){
+  const st=d.status,sg=stageList(d),conf=d.stores.filter(s=>s.conf!=null).length;let body='';
+  if(st==='negotiate')body=`<p class="small"><span class="crit-t"><b>Outside the playbook.</b></span> ${d.counterTerms?esc(d.trig.approver)+' replied with a counter.':'Waiting for '+esc(d.trig.approver)+'.'}</p><div><button type="button" class="btn small" data-goto="deals">Open Deal room</button></div>`;
+  else if(st==='approved')body=`<p class="small"><span class="pos-t"><b>${d.auto?'Auto-approved':'Approved'}</b></span> ${d.auto?`the moment it was sent, inside ${esc(d.trig.brand)} playbook v${d.pbVer}.`:`in the Deal room, ${esc(d.approvedAt)}.`} ${d.fund?money(d.fund)+' drawn from the brand fund.':'Retailer-funded.'}</p><div><button type="button" class="btn primary" data-launch="${d.id}">${ic('play',15)}Launch in PMR and OPP</button></div>`;
+  else body=`<div class="small">${conf} of ${d.stores.length} stores confirmed set-up${st==='live'?(liveDay(d)?` · day ${liveDay(d)} of ${d.days}`:' · sales start tomorrow'):' · ended'}</div><div class="chips">${d.stores.map(s=>`<span class="chip ${s.conf!=null?'yes':(st!=='live'||liveDay(d)>=1?'notyet':'')}">${esc(s.n)}${s.conf!=null?' ✓':s.nudged!=null?' · nudged':''}</span>`).join('')}</div>`;
+  const sel=S.trackSel===d.id;
+  return `<div class="card deal ${sel?'sel':''}" data-track="${d.id}" role="button" tabindex="0" aria-pressed="${sel}" aria-label="Track ${esc(d.trig.product)}">
+    <div class="row between"><h3>${esc(d.trig.product)}</h3>${dealTag(d)}</div>
+    <span class="small muted">${esc(d.opt.label)} · ${d.days} days · ${esc(d.trig.brand)} funds ${pct(d.share)}</span>
+    <div class="miniflow" aria-hidden="true">${sg.map(s=>`<i class="${s[1]}"></i>`).join('')}</div>${body}</div>`;
+}
+function trackPanel(d){
+  const sg=stageList(d),evs=sortedTrack(d),last=evs[evs.length-1],maxSeq=evs.reduce((m,e)=>Math.max(m,e.seq),0),now=Date.now(),icons=['bulb','check','send','store','chart','flag'];
+  let html='',cur=null;
+  evs.forEach(e=>{if(e.abs!==cur){cur=e.abs;html+=`<li class="date">${dateOf(e.abs)}</li>`}
+    html+=`<li class="ev ${now-e.at<1800?'fresh':''}"><span class="t">${fmtTime(e.m)}</span><span class="dot k-${e.step}" aria-hidden="true"></span><span>${esc(e.text)}<span class="sys">${esc(e.sys)}</span></span></li>`});
+  return `<div class="card trk">
+    <div class="card-h"><div><span class="lbl">Live tracker</span><h3 style="font-size:17px">${esc(d.trig.product)}</h3><small>${esc(d.opt.label)} · ${esc(d.trig.brand)}</small></div>
+    ${d.status==='done'?'<span class="tag none">Ended</span>':`<span class="tag info"><span class="pulse"></span>Live · last step ${last?fmtTime(last.m):''}</span>`}</div>
+    <ol class="pflow" aria-label="Stages">${sg.map(([l,s,sub],i)=>`<li class="${s||'todo'}"><span class="node">${ic(s==='done'?'check':s==='part'?'alert':icons[i],17)}</span><b>${esc(l)}</b><small>${esc(sub)}</small></li>`).join('')}</ol>
+    <ol class="tl" data-id="${d.id}" data-seq="${maxSeq}" aria-label="Every step for ${esc(d.trig.product)}">${html}</ol>
+    <span class="small muted">Each step shows the SAP system that recorded it. Use Simulate next day to see sales and store set-up come in.</span>
+  </div>`;
+}
+function renderExecute(){
+  const el=$('execute'),ds=S.deals.slice().reverse();
+  if(!ds.length){el.innerHTML=empty('Nothing in flight','Send a suggestion to start a deal.');return}
+  if(!ds.some(d=>d.id===S.trackSel))S.trackSel=ds[0].id;
+  const old=el.querySelector('.tl'),keep=old?{top:old.scrollTop,bottom:old.scrollHeight-old.scrollTop-old.clientHeight<24,seq:+old.dataset.seq,id:old.dataset.id}:null;
+  el.innerHTML=`<div class="ex"><div class="col" style="gap:12px"><div class="sec-h"><h2>Deals in flight</h2><span class="small muted">${ds.length} deal${ds.length>1?'s':''}</span></div>${ds.map(dealCard).join('')}</div><div class="col">${trackPanel(ds.find(d=>d.id===S.trackSel))}</div></div>`;
+  const tl=el.querySelector('.tl');if(tl){if(!keep||keep.id!==tl.dataset.id||keep.bottom||+tl.dataset.seq>keep.seq)tl.scrollTop=tl.scrollHeight;else tl.scrollTop=keep.top}
+}
+
+/* ---------- monitor ---------- */
+function nice(x){const p=Math.pow(10,Math.floor(Math.log10(x)));const m=x/p;return (m<=1?1:m<=2?2:m<=5?5:10)*p}
+function chart(deal){
+  const D=deal.days,W=560,H=220,L=44,Rm=12,T=16,B=30,ld=liveDay(deal);
+  const days=[...Array(D)].map((_,i)=>{const dn=i+1;let f=0,a=0,has=false;deal.stores.forEach(st=>{const h=st.hist.find(x=>x.dn===dn);if(h){f+=h.f;a+=h.a;has=true}else f+=st.base*liftOf(st,deal.opt,true)});return {dn,f,a,has}});
+  const maxV=Math.max(...days.map(d=>Math.max(d.f,d.a)))*1.15||1,step=nice(maxV/4),top=Math.ceil(maxV/step)*step,y=v=>T+(H-T-B)*(1-v/top),cw=(W-L-Rm)/D,bw=Math.min(34,cw*.5);
+  let g='';for(let v=0;v<=top+1e-9;v+=step)g+=`<line x1="${L}" x2="${W-Rm}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L-8}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="var(--muted)">${R(v)}</text>`;
+  days.forEach((d,i)=>{const x=L+cw*i+cw/2,cur=d.dn===ld&&deal.status==='live';
+    if(d.has)g+=`<rect class="cbar" x="${x-bw/2}" y="${y(d.a)}" width="${bw}" height="${Math.max(0,y(0)-y(d.a))}" rx="4" fill="${d.a>=d.f*.95?'var(--accent-fill)':'var(--crit-fill)'}" style="animation-delay:${i*60}ms"><title>Day ${d.dn}: ${R(d.a)} sold, ${R(d.f)} forecast</title></rect>`;
+    else g+=`<rect x="${x-bw/2}" y="${y(d.f)}" width="${bw}" height="${Math.max(0,y(0)-y(d.f))}" rx="4" fill="none" stroke="var(--field)" stroke-dasharray="3 3"/>`;
+    g+=`<line x1="${x-bw/2-6}" x2="${x+bw/2+6}" y1="${y(d.f)}" y2="${y(d.f)}" stroke="var(--tick)" stroke-width="3" stroke-linecap="round"/>`;
+    g+=`<text x="${x}" y="${H-10}" text-anchor="middle" font-size="11" fill="${cur?'var(--accent)':'var(--muted)'}" font-weight="${cur?700:400}">Day ${d.dn}</text>`});
+  g+=`<line x1="${L}" x2="${W-Rm}" y1="${y(0)}" y2="${y(0)}" stroke="var(--muted)"/>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Units per day, actual against forecast, for ${esc(deal.trig.product)}">${g}</svg>`;
+}
+function renderMonitor(){
+  const el=$('monitor'),live=S.deals.filter(d=>d.status==='live'||d.status==='done');
+  if(!live.length){el.innerHTML=empty('No live promotions','Launch a deal from Execute to watch it here.');return}
+  if(!live.some(d=>d.id===S.monitorSel))S.monitorSel=live[0].id;
+  const d=live.find(x=>x.id===S.monitorSel),dn=liveDay(d),tt=dealTotals(d),rs=recs(d),conf=d.stores.filter(s=>s.conf!=null).length,vs=tt.profitPlan?tt.profitAct/tt.profitPlan-1:0,exr=tt.fEx?tt.aEx/tt.fEx:0;
+  const LI={nudge:'users',move:'truck',exp:'truck',offer:'phone',wave:'layers'};
+  const rows=d.stores.map(st=>{const f=st.hist.reduce((x,h)=>x+h.f,0),a=st.hist.reduce((x,h)=>x+h.a,0),r=f?a/f:0,low=st.remaining<st.base*2;
+    return `<div class="srow"><div class="sname"><b>${esc(st.n)}</b>${st.conf!=null?'<span class="tag pos sm">Set up</span>':'<span class="tag neg sm">Not set up</span>'}</div>
+      <div class="bullet" title="${R(a)} sold of ${R(f)} forecast"><i style="width:${f?Math.min(100,a/(f*1.2)*100):0}%;background:${r>=.95?'var(--pos-fill)':r>=.8?'var(--accent-fill)':'var(--crit-fill)'}"></i><span class="tg"></span></div>
+      <span class="v small">${R(a)} / ${R(f)}</span><span class="v small ${low?'neg':'muted'}">${R(st.remaining)} left</span></div>`}).join('');
+  el.innerHTML=`<div class="col">
+    ${live.length>1?`<div class="seg" role="group" aria-label="Live promotions">${live.map(x=>`<button type="button" class="segb" data-mon="${x.id}" aria-pressed="${x.id===d.id}">${esc(short(x.trig.product))}</button>`).join('')}</div>`:''}
+    <div class="mgrid"><div class="col">
+      <div class="card"><div class="card-h"><div><h3 style="font-size:17px">${esc(d.trig.product)} · ${esc(d.opt.label)}</h3><small>${d.status==='done'?'Ended':dn?`Day ${dn} of ${d.days}`:'Starts tomorrow'} · ${esc(d.trig.brand)} funds ${pct(d.share)}</small></div><button type="button" class="btn small" data-track="${d.id}">${ic('send',14)}Track every step</button></div>
+        <div class="stats">
+          <div><span>Sold vs forecast</span><b>${dn?pct(tt.f?tt.a/tt.f:0):'–'}</b><small>${R(tt.a)} of ${R(tt.f)} units</small></div>
+          <div><span>Stores that set up</span><b class="${exr>=.95?'pos-t':''}">${dn?pct(exr):'–'}</b><small>of their forecast</small></div>
+          <div><span>Set-up confirmed</span><b class="${conf<d.stores.length?'crit-t':''}">${conf} of ${d.stores.length}</b><small>stores</small></div>
+          <div><span>Profit vs plan</span><b class="${vs<-0.05?'neg':''}">${dn?FMT.spct(vs):'–'}</b><small>${money(tt.profitAct)} to date</small></div>
+        </div>
+        <div class="chartbox">${chart(d)}</div>
+        <div class="legend"><span><i class="sw" style="background:var(--accent-fill)"></i>On forecast</span><span><i class="sw" style="background:var(--crit-fill)"></i>Below forecast</span><span><i class="lt"></i>Forecast</span><span><i class="sw" style="border:1.5px dashed var(--field)"></i>Upcoming</span></div>
+      </div>
+      <div class="card"><div class="card-h"><div><h3>Stores</h3><small>Sold against forecast to date · line marks 100%</small></div></div><div class="srows">${rows}</div></div>
+    </div><div class="col">
+      <div class="card"><div class="card-h"><h3 class="row" style="gap:6px"><span style="color:var(--accent)">${ic('sparkle',15)}</span>Agent recommendations</h3>${rs.length?`<span class="tag info">${rs.length}</span>`:''}</div>
+        ${rs.length?rs.map(r=>`<div class="rec"><span class="ricon">${ic(LI[r.id.split('-')[0]]||'layers',18)}</span><div class="col" style="gap:6px"><span class="lever">${esc(r.lever)}</span><p>${esc(r.text)}</p><div class="row"><button type="button" class="btn primary small" data-rec="${r.id}">${esc(r.act)}</button><button type="button" class="btn ghost small" data-dis="${r.id}">Dismiss</button></div></div></div>`).join(''):`<p class="small muted">${dn?'Nothing to act on. The agent checks again tomorrow.':'Recommendations start after day 1.'}</p>`}</div>
+      <div class="card"><h3>Locked while live</h3><div class="locked"><div>${ic('lock',15)}Advertised price, ${esc(d.opt.label)} until the end date</div><div>${ic('lock',15)}${esc(d.trig.brand)} funding terms</div><div>${ic('lock',15)}Printed flyer and shelf signage</div></div><span class="small muted">The agent only moves levers that can still change.</span></div>
+      ${d.events.length?`<div class="card"><h3>Actions taken</h3><div class="log">${d.events.map(e=>`<div>${esc(e)}</div>`).join('')}</div></div>`:''}
+    </div></div></div>`;
+}
+
+/* ---------- deal room ---------- */
+function editForm(b,pb){
+  const T=pb.terms,id=slug(b),V=(k,d)=>S.editVals&&S.editVals[k]!=null?S.editVals[k]:d;
+  return `<div class="edit">
+   <label for="e-${id}-max">Max discount, %<input id="e-${id}-max" type="number" min="5" max="50" step="5" value="${esc(V('max',R(T.maxDiscount*100)))}"></label>
+   <label for="e-${id}-days">Max length, days<input id="e-${id}-days" type="number" min="1" max="14" value="${esc(V('days',T.maxDays))}"></label>
+   <label for="e-${id}-min">Brand funds at least, %<input id="e-${id}-min" type="number" min="0" max="100" step="5" value="${esc(V('min',R(T.minShare*100)))}"></label>
+   <label for="e-${id}-maxs">Brand funds at most, %<input id="e-${id}-maxs" type="number" min="0" max="100" step="5" value="${esc(V('maxs',R(T.maxShare*100)))}"></label>
+   <label for="e-${id}-fund">Monthly fund, $<input id="e-${id}-fund" type="number" min="0" step="100" value="${esc(V('fund',T.budget))}"></label>
+  </div>`;
+}
+function pbCard(b,pb){
+  const T=pb.terms,used=T.budget?Math.min(1,pb.used/T.budget):0,editing=S.editing===b,P=pb.pending,signedR=pb.status!=='pending_retailer';
+  const st=pb.status==='active'?['pos',`Active · v${pb.ver}`]:pb.status==='pending_brand'?['crit',`Changes with ${pb.contact.split(' ')[0]}`]:['info','Needs your signature'];
+  let btns='';
+  if(pb.status==='pending_retailer')btns=`<button type="button" class="btn primary" data-sign="${esc(b)}">${ic('pen',15)}Sign these terms</button>`;
+  else if(editing)btns=`<button type="button" class="btn primary" data-propose="${esc(b)}">${ic('send',15)}Send to ${esc(pb.contact)}</button><button type="button" class="btn ghost" data-cancel="1">Cancel</button>`;
+  else if(pb.status==='active')btns=`<button type="button" class="btn" data-edit="${esc(b)}">Propose new terms</button>`;
+  return `<div class="card">
+   <div class="card-h"><div><h3 style="font-size:16px">${esc(b)}</h3><small>${signedR?`v${pb.ver} signed ${esc(pb.signed)}`:`Proposed ${esc(pb.proposed)}`}</small></div><span class="tag ${st[0]}">${esc(st[1])}</span></div>
+   <div class="sigs"><span class="sig ${signedR?'':'wait'}"><span class="av">DO${signedR?`<span class="okb">${ic('check',8)}</span>`:''}</span>Dana Ortiz${signedR?'':' · not signed'}</span><span class="sig"><span class="av b">${initials(pb.contact)}<span class="okb">${ic('check',8)}</span></span>${esc(pb.contact)}</span></div>
+   ${editing?editForm(b,pb):`<div class="rgrid"><div><span>Max discount</span><b>${pct(T.maxDiscount)}</b></div><div><span>Brand funds</span><b>${pct(T.minShare)}–${pct(T.maxShare)}</b></div><div><span>Max length</span><b>${T.maxDays} days</b></div><div><span>Monthly fund</span><b>${money(T.budget)}</b></div></div>`}
+   <div class="col" style="gap:6px"><span class="lbl">Brand share by cause</span>${Object.entries(CAUSES).map(([k,c])=>`<div class="crow"><span>${esc(c.label)}</span><span class="bar thin"><i style="width:${pb.cause[k]*100}%;background:var(--cpg)"></i></span><b>${pct(pb.cause[k])}</b></div>`).join('')}</div>
+   ${signedR?`<div class="col" style="gap:6px"><div class="row between small"><span>Fund is <b>${pct(used)}</b> used this month</span></div><div class="bar lg"><i style="width:${used*100}%;background:var(--cpg)"></i></div><div class="tv"><div><span><i class="sw" style="background:var(--cpg)"></i> Drawn</span><b>${money(pb.used)}</b></div><div><span><i class="sw" style="background:var(--track)"></i> Remaining</span><b>${money(T.budget-pb.used)}</b></div></div></div>`:`<p class="small muted">${esc(pb.contact)} proposed these terms on ${esc(pb.proposed)}. Until you sign, every ${esc(b)} deal is negotiated one at a time.</p>`}
+   ${P?`<p class="small muted">Sent: ${pct(P.maxDiscount)} max, brand ${pct(P.minShare)}–${pct(P.maxShare)}, ${P.maxDays} days, ${money(P.budget)} a month. v${pb.ver} applies until ${esc(pb.contact)} signs.</p>`:''}
+   ${pb.ledger.length?`<details class="ledger"><summary>${pb.ledger.length} deal${pb.ledger.length>1?'s':''} approved under this playbook</summary>${pb.ledger.map(l=>`<div>${esc(l)}</div>`).join('')}</details>`:''}
+   ${btns?`<div class="row">${btns}</div>`:''}
+   ${editing&&S.editErr?`<p class="ferr" role="alert">${esc(S.editErr)}</p>`:''}
+  </div>`;
+}
+function threadCard(d){
+  const t=d.trig,c=d.counterTerms;
+  return `<div class="card thread"><div class="card-h"><div><h3>${esc(t.product)}</h3><small>${esc(t.brand)}</small></div><span class="tag crit">Exception</span></div>
+   ${d.thread.map(m=>`<div class="msg ${m.who==='ret'?'ret':'cpgm'}"><span class="av ${m.who==='ret'?'':'b'}">${m.who==='ret'?'DO':initials(t.approver)}</span><div class="bub"><b>${esc(m.name)}</b><span>${esc(m.text)}</span></div></div>`).join('')}
+   ${c?`<div class="row"><button type="button" class="btn primary" data-accept="${d.id}">${ic('check',15)}Accept: ${esc(c.opt.label)}, ${c.days} days, brand ${pct(c.share)}</button><button type="button" class="btn ghost" data-solo="${d.id}">Run it retailer-funded</button></div>`:`<p class="small muted row" style="gap:6px"><span class="pulse" style="color:var(--accent)"></span>${esc(t.approver)} is reviewing in SAP Trade Management…</p>`}
+  </div>`;
+}
+function renderDeals(){
+  const el=$('deals');
+  if(S.editing){const id=slug(S.editing),vals={};['max','days','min','maxs','fund'].forEach(k=>{const e=$(`e-${id}-${k}`);if(e)vals[k]=e.value});if(Object.keys(vals).length)S.editVals=vals}
+  const ex=S.deals.filter(d=>d.status==='negotiate');
+  el.innerHTML=`<div class="col">
+   <div class="strip info">${ic('info',18)}<span>Each brand signs one set of rules with Dana. A promotion inside them is approved the moment she sends it, and the brand’s share comes out of its monthly fund. Anything outside them lands here as one thread instead of an email chain. Brand replies are simulated in this prototype.</span></div>
+   ${ex.length?`<div class="sec-h"><h2>Exceptions</h2><span class="tag crit">${ex.length} open</span></div><div class="pbgrid">${ex.map(threadCard).join('')}</div>`:''}
+   <div class="sec-h"><h2>Brand playbooks</h2><span class="small muted">Mirrored in each brand’s SAP Trade Management</span></div>
+   <div class="pbgrid">${Object.entries(PLAYBOOKS).map(([b,pb])=>pbCard(b,pb)).join('')}
+    <div class="card"><div class="card-h"><div><h3 style="font-size:16px">Store-brand dairy</h3><small>Retailer-funded</small></div><span class="tag none">No brand partner</span></div><p class="small muted">Store-brand items have nobody to split the cost with, so their promotions are retailer-funded. For these, the agent leans on stock transfers and replenishment changes before discounting.</p></div>
+   </div></div>`;
+}
+
+/* ---------- Joule ---------- */
+const JQS=['What should I act on today?','Why is yogurt at risk?','Where is each deal right now?','Which brand playbooks are signed?','Why is the orange juice promotion flat in Riverside?'];
+function answer(q){
+  const t=q.toLowerCase(),live=S.deals.filter(d=>d.status==='live');
+  const storeHit=STORE_NAMES.find(n=>new RegExp('\\b'+n.toLowerCase().split(' ')[0]+'\\b').test(t));
+  if(storeHit&&(t.includes('why')||t.includes('flat')||t.includes('slow')||t.includes('behind'))){
+    const d=live.find(x=>x.trig.product.toLowerCase().split(' ').some(w=>w.length>3&&t.includes(w)))||live[0];
+    if(!d)return 'No promotion is live right now.';
+    const st=d.stores.find(s=>s.n===storeHit),f=st.hist.reduce((x,h)=>x+h.f,0),a=st.hist.reduce((x,h)=>x+h.a,0);
+    if(st.conf==null)return `<b>${esc(storeHit)}</b> sold ${R(a)} of ${R(f)} forecast units of ${esc(d.trig.product)} because the store hasn’t confirmed set-up, so shoppers likely never saw the deal. That’s an execution gap, not a weak promotion. Monitor has a nudge ready that also pauses replenishment until it’s set up.`;
+    return `<b>${esc(storeHit)}</b> set up the promotion and sold ${R(a)} of ${R(f)} forecast units (${pct(f?a/f:0)}). ${st.remaining<st.base*2?'It’s close to selling out, so check the stock-move recommendation in Monitor.':'Stock is fine for the rest of the promotion.'}`;
+  }
+  const trg=TRIGGERS.find(x=>t.includes(x.kw));
+  if(trg&&(t.includes('why')||t.includes('risk'))){
+    const pb=PLAYBOOKS[trg.brand],op=trg.options.find(o=>o.id===trg.rec);
+    return `<b>${esc(trg.product)}</b>: ${trg.facts.map(esc).join('. ')}. Cause: ${esc(CAUSES[trg.cause].label.toLowerCase())}. At today’s rate, ${R(atRisk(trg))} units ${trg.kind==='Overstock'?'sit beyond target cover':'expire unsold'}. I’d start with <b>${esc(op.label)}</b>${pbActive(pb)?`, which fits the ${esc(trg.brand)} playbook`:''}.`;
+  }
+  if(t.includes('where')||t.includes('step')||t.includes('status')){
+    if(!S.deals.length)return 'No deals in flight.';
+    return S.deals.map(d=>{const sg=stageList(d),cur=sg.find(x=>x[1]==='now')||sg.find(x=>x[1]==='')||sg[sg.length-1],ev=sortedTrack(d).pop();
+      return `<b>${esc(d.trig.product)}</b>: ${esc(cur[0])}${cur[2]?' ('+esc(cur[2])+')':''}. Last step: ${ev?esc(ev.text)+', '+dateOf(ev.abs)+' at '+fmtTime(ev.m):'none yet'}.`}).join('<br><br>');
+  }
+  if(t.includes('playbook')||t.includes('signed')||t.includes('fund')){
+    return Object.entries(PLAYBOOKS).map(([b,pb])=>`<b>${esc(b)}</b>: ${pb.status==='pending_retailer'?`proposed by ${esc(pb.contact)}, waiting for your signature in the Deal room`:`v${pb.ver} signed by both sides, ${money(pb.terms.budget-pb.used)} of ${money(pb.terms.budget)} left this month`}.`).join('<br>');
+  }
+  if(t.includes('act')||t.includes('today')||t.includes('need')){
+    const open=openT(),r=live.reduce((n,d)=>n+recs(d).length,0),ex=S.deals.filter(d=>d.status==='negotiate').length;
+    return `${open.length?`<b>${open.length} trigger${open.length>1?'s':''} in Suggest:</b> ${open.map(x=>`${esc(x.product)} (${esc(x.kind.toLowerCase())}, ${R(atRisk(x))} units at risk)`).join('; ')}. `:'No open triggers. '}${r?`<b>${r} recommendation${r>1?'s':''}</b> waiting in Monitor. `:''}${ex?`<b>${ex} exception${ex>1?'s':''}</b> open in the Deal room.`:''}`;
+  }
+  if(t.includes('plan')||t.includes('doing')||t.includes('profit')||t.includes('how')){
+    if(!live.length)return 'No promotions are live.';
+    return live.map(d=>{const x=dealTotals(d);return `<b>${esc(d.trig.product)}</b>: day ${liveDay(d)} of ${d.days}, ${R(x.a)} units vs ${R(x.f)} forecast (${pct(x.f?x.a/x.f:0)}). Stores that set up are at ${pct(x.fEx?x.aEx/x.fEx:0)} of forecast.`}).join('<br>');
+  }
+  return 'I can answer questions about this workspace: what needs you today, why a product is at risk, where each deal is, how live promotions are doing, or why a store is behind.';
+}
+function renderJoule(){const m=$('jmsgs');
+  m.innerHTML=`<div class="ja">Hi Dana. ${answer('what should I act on today')}</div>`+S.jlog.map(x=>`<div class="jq">${esc(x.q)}</div><div class="ja">${x.a}</div>`).join('');
+  m.scrollTop=m.scrollHeight;
+  $('jsugg').innerHTML=JQS.map(q=>`<button type="button" class="btn small" data-q="${esc(q)}">${esc(q)}</button>`).join('')}
+function openJoule(){$('joule').classList.add('open');$('scrim').hidden=false;renderJoule();setTimeout(()=>{const i=$('jq');if(i)i.focus()},80)}
+function closeJoule(){$('joule').classList.remove('open');$('scrim').hidden=true}
+function ask(q){if(!q||!q.trim())return;S.jlog.push({q,a:answer(q)});openJoule()}
+
+/* ---------- toasts, motion ---------- */
+function toast(msg,act){const box=$('toasts');if(!box)return;const t=document.createElement('div');t.className='toast';t.setAttribute('role','status');
+  t.innerHTML=`<span class="ti">${ic('check',17)}</span><span class="tm">${esc(msg)}</span>${act?`<button type="button" class="tact">${esc(act.label)}</button>`:''}`;
+  if(act)t.querySelector('.tact').addEventListener('click',()=>{t.remove();act.fn()});
+  box.appendChild(t);while(box.children.length>3)box.firstChild.remove();
+  setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),320)},act?6500:4000)}
+const reduced=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}};
+function animateNums(){const rm=reduced();document.querySelectorAll('[data-num]').forEach(el=>{const k=el.dataset.key,to=+el.dataset.num,f=el.dataset.fmt,from=S.nums[k];S.nums[k]=to;
+  if(rm||from===to||(from==null&&!S.first))return;const f0=from??0,t0=performance.now();
+  const step=now=>{const p=Math.min(1,(now-t0)/650),e=1-Math.pow(1-p,3);el.textContent=FMT[f](f0+(to-f0)*e);if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)})}
+function pulseAnim(){const m=$('main');m.classList.remove('anim');void m.offsetWidth;m.classList.add('anim');clearTimeout(S.animT);S.animT=setTimeout(()=>m.classList.remove('anim'),900)}
+function setTab(id){S.tab=id;try{localStorage.setItem('pp-tab',id)}catch(e){}renderTabs();pulseAnim()}
+function render(){renderKpis();renderTabs();renderSuggest();renderExecute();renderMonitor();renderDeals();if($('joule').classList.contains('open'))renderJoule();animateNums();S.first=false}
+
+/* ---------- events ---------- */
+function bindRanges(){
+  const d=$('days'),s=$('share');
+  if(d){d.addEventListener('input',()=>{$('days-v').textContent=d.value+' days'});d.addEventListener('change',()=>{S.draft[S.sel].days=+d.value;renderSuggest();animateNums();const n=$('days');if(n)n.focus()})}
+  if(s){s.addEventListener('input',()=>{$('share-v').textContent=s.value+'%'});s.addEventListener('change',()=>{S.draft[S.sel].share=+s.value/100;renderSuggest();animateNums();const n=$('share');if(n)n.focus()})}
+}
+document.addEventListener('click',e=>{
+  const g=k=>e.target.closest('['+k+']');let el;
+  if(el=g('data-close-joule')){closeJoule();return}
+  if(el=g('data-open-joule')){openJoule();return}
+  if(el=g('data-q')){ask(el.dataset.q);return}
+  if(el=g('data-tab')){setTab(el.dataset.tab);return}
+  if(el=g('data-sel')){S.sel=el.dataset.sel;renderSuggest();animateNums();return}
+  if(el=g('data-opt')){S.draft[S.sel].opt=el.dataset.opt;renderSuggest();animateNums();return}
+  if(el=g('data-inc')){const ex=S.draft[S.sel].exclude,n=el.dataset.inc;ex[n]=!ex[n];renderSuggest();animateNums();return}
+  if(el=g('data-launch')){doLaunch(S.deals.find(x=>x.id===el.dataset.launch));return}
+  if(el=g('data-goto')){setTab(el.dataset.goto);return}
+  if(el=g('data-edit')){S.editing=el.dataset.edit;S.editErr=null;S.editVals=null;renderDeals();return}
+  if(el=g('data-cancel')){S.editing=null;S.editErr=null;S.editVals=null;renderDeals();return}
+  if(el=g('data-propose')){proposeTerms(el.dataset.propose);render();return}
+  if(el=g('data-sign')){const b=el.dataset.sign,pb=PLAYBOOKS[b];pb.status='active';pb.signed=dayLabel();TRIGGERS.filter(t=>t.brand===b).forEach(t=>{if(!S.deals.some(d=>d.id===t.id))S.draft[t.id].share=causeShare(t)});render();toast(`${b} playbook signed. Deals inside it now auto-approve.`);return}
+  if(el=g('data-accept')){acceptCounter(S.deals.find(x=>x.id===el.dataset.accept));setTab('execute');render();return}
+  if(el=g('data-solo')){runSolo(S.deals.find(x=>x.id===el.dataset.solo));setTab('execute');render();return}
+  if(el=g('data-mon')){S.monitorSel=el.dataset.mon;if(S.tab!=='monitor')setTab('monitor');render();return}
+  if(el=g('data-dis')){const d=S.deals.find(x=>x.id===S.monitorSel);d.dismissed[el.dataset.dis]=true;render();return}
+  if(el=g('data-rec')){
+    const d=S.deals.find(x=>x.id===S.monitorSel),r=recs(d).find(x=>x.id===el.dataset.rec);if(!r)return;
+    const when=dateOf(S.today);
+    if(r.id.startsWith('nudge')){const st=d.stores.find(s=>s.n===r.store);st.nudged=S.today;d.events.push(`${when}: nudged ${r.store}; replenishment paused until set-up (S/4HANA)`)}
+    else if(r.id.startsWith('move')){const a=d.stores.find(s=>s.n===r.from),b=d.stores.find(s=>s.n===r.to);a.remaining-=r.q;b.remaining+=r.q;d.events.push(`${when}: moved ${r.q} units ${r.from} → ${r.to} (S/4HANA stock transfer)`)}
+    else if(r.id.startsWith('exp')){const b=d.stores.find(s=>s.n===r.to);b.remaining+=r.q;d.events.push(`${when}: expedited ${r.q} units to ${r.to} from the DC`)}
+    else if(r.id==='offer'){d.offer={from:S.today+1,stores:r.stores};d.events.push(`${when}: app offer sent to shoppers of ${r.stores.join(', ')} (Engagement Cloud)`)}
+    else if(r.id==='wave'){d.events.push(`${when}: next wave planned for the stores that beat forecast`)}
+    d.done[r.id]=true;
+    const SY={nudge:'Store app',move:'S/4HANA',exp:'S/4HANA',offer:'Engagement Cloud',wave:'Promo Pulse'},txt=d.events[d.events.length-1].replace(/^.*?: /,'').replace(/\s*\([^)]*\)$/,'');
+    log(d,'agent','Approved by Dana: '+txt,SY[r.id.split('-')[0]]||'Promo Pulse');
+    render();toast('Done: '+txt);return}
+  const a=g('data-act');
+  if(a&&a.dataset.act==='send'){
+    const t=TRIGGERS.find(x=>x.id===S.sel),dr=S.draft[t.id],o=t.options.find(x=>x.id===dr.opt),checks=playbook(dr,o,t),inPb=checks.every(x=>x[0]),plan=trigPlan(t,dr),pbx=PLAYBOOKS[t.brand];
+    const deal={id:t.id,trig:t,opt:o,days:dr.days,share:dr.share,status:inPb?'approved':'negotiate',auto:inPb,fund:plan.fund,pbVer:pbx?pbx.ver:null,thread:[],track:[],created:S.today,startDay:null,wastePlan:plan.wasteAvoid,
+      stores:t.stores.filter(st=>!dr.exclude[st.n]).map(st=>({...st,start:st.stock,remaining:st.stock,conf:null,nudged:null,hist:[]})),offer:null,dismissed:{},done:{},events:[]};
+    const left=t.stores.length-deal.stores.length;
+    log(deal,'detect',`${t.kind} flagged: ${R(atRisk(t))} units at risk in ${t.stores.length} stores`,'S/4HANA + CAR',S.today,425);
+    log(deal,'decide',`Dana picked ${o.label}, ${dr.days} days, ${t.brand} funds ${pct(dr.share)}${left?`, ${left} store${left>1?'s':''} left out`:''}`,'Promo Pulse');
+    S.trackSel=deal.id;
+    if(inPb){log(deal,'approve',`Inside all ${checks.length} playbook rules. Auto-approved under v${pbx.ver}, ${money(plan.fund)} committed`,'Trade Mgmt');commitFunding(deal);deal.approvedAt=dayLabel()}
+    else{log(deal,'exception',`Outside the playbook on: ${checks.filter(x=>!x[0]).map(x=>x[1]).join('; ')}. Sent to ${t.approver} as an exception`,'Deal room');
+      deal.thread.push({who:'ret',name:'Dana Ortiz',text:`${o.label}, ${dr.days} days, brand funds ${pct(dr.share)}. Outside the playbook on: ${checks.filter(x=>!x[0]).map(x=>x[1]).join('; ')}.`});
+      later(700,()=>log(deal,'exception',`${t.approver} opened it in SAP Trade Management`,'Trade Mgmt'));
+      later(1600,()=>counter(deal))}
+    S.deals.push(deal);setTab(inPb?'execute':'deals');render();
+    if(inPb)toast(`Auto-approved under ${t.brand} playbook v${pbx.ver} · ${money(plan.fund)} committed`,{label:'Launch now',fn:()=>doLaunch(deal)});
+    else toast(`Sent to ${t.approver} as an exception`);
+    try{window.scrollTo({top:0,behavior:reduced()?'auto':'smooth'})}catch(err){}
+    return;
+  }
+  if(a&&a.dataset.act==='nextday'){
+    S.today++;S.clock=540;let ended=[];
+    S.deals.forEach(d=>{if(d.status!=='live')return;
+      d.stores.forEach(st=>{if(st.conf==null&&st.nudged!=null&&S.today>st.nudged){st.conf=S.today-1;log(d,'store',`${st.n} confirmed set-up after the nudge`,'Store app',S.today-1,1150)}});
+      simDay(d,S.today);
+      if(S.today>d.startDay+d.days){d.status='done';ended.push(d);const x=dealTotals(d);log(d,'end',`Ended. ${R(x.a)} sold vs ${R(x.f)} forecast; stores that set up hit ${pct(x.fEx?x.aEx/x.fEx:0)} of forecast`,'CAR',S.today,480)}
+    });
+    render();
+    const liveN=S.deals.filter(d=>d.status==='live').length;
+    toast(`${dateOf(S.today)} · overnight sales loaded from CAR${ended.length?`, ${ended.length} promotion${ended.length>1?'s':''} ended`:''}`,liveN?{label:'Monitor',fn:()=>setTab('monitor')}:null);
+    return;
+  }
+  if(el=g('data-track')){S.trackSel=el.dataset.track;if(S.tab!=='execute')setTab('execute');renderExecute();return}
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&$('joule').classList.contains('open')){closeJoule();return}
+  const card=e.target.closest&&e.target.closest('[role="button"][data-track]');
+  if(card&&e.target===card&&(e.key==='Enter'||e.key===' ')){e.preventDefault();card.click();return}
+  const t=e.target.closest&&e.target.closest('[role="tab"]');if(!t)return;
+  const i=TABS.findIndex(x=>x[0]===t.dataset.tab),N=TABS.length;let j=null;
+  if(e.key==='ArrowRight')j=(i+1)%N;else if(e.key==='ArrowLeft')j=(i+N-1)%N;else if(e.key==='Home')j=0;else if(e.key==='End')j=N-1;
+  if(j==null)return;e.preventDefault();setTab(TABS[j][0]);$('t-'+TABS[j][0]).focus();
+});
+$('sform').addEventListener('submit',e=>{e.preventDefault();const q=$('sq').value.trim();if(!q){$('sq').focus();return}$('sq').value='';ask(q)});
+$('jform').addEventListener('submit',e=>{e.preventDefault();const q=$('jq').value.trim();if(!q)return;$('jq').value='';ask(q)});
+
+document.querySelectorAll('[data-ic]').forEach(x=>{x.innerHTML=ic(x.dataset.ic,+x.dataset.sz||18)});
+render();pulseAnim();
+})();
+</script>
