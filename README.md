@@ -1,0 +1,187 @@
+# Promo Pulse Graphics
+
+Motion graphics built with [Remotion](https://www.remotion.dev) (React + TypeScript),
+exported as files you can drop into any video editor (Premiere, Resolve, Final Cut,
+After Effects, CapCut…).
+
+The four starter graphics are deliberately plain — neutral colors, one font, simple
+moves — so you can take the look in your own direction.
+
+## Setup
+
+```bash
+npm install
+npm run studio      # live preview at http://localhost:3000
+```
+
+Requires Node 18+. The first render downloads a headless Chrome automatically.
+
+## Project layout
+
+```
+remotion.config.ts        CLI/Studio defaults
+src/
+  index.ts                entry point (registerRoot) — leave as is
+  Root.tsx                registers every composition (id, size, fps, schema, defaultProps)
+  config.ts               ★ WIDTH / HEIGHT / FPS, sec(), px(), title-safe area, colors
+  fonts.ts                Google Font loading (@remotion/google-fonts)
+  lib/animation.ts        useEnterExit() — spring in, eased out, 0 on first & last frame
+  compositions/           one file per graphic
+    TitleCard.tsx         full-frame title + subtitle
+    LowerThird.tsx        name/role bar          (transparent background)
+    KineticText.tsx       word-by-word text
+    OverlayBadge.tsx      badge + sound effect   (transparent background)
+public/                   static assets → reference with staticFile("…")
+  fonts/  images/  audio/
+out/                      renders (git-ignored)
+```
+
+## Preview & live editing
+
+`npm run studio` opens Remotion Studio. Pick a composition in the left sidebar, scrub
+the timeline, and edit props in the right-hand **Props** panel — every graphic has a
+zod schema, so text fields, color pickers, sliders and dropdowns are generated
+automatically. Hit **Save** in the panel to write new defaults back into the code.
+
+Tip: toggle the checkerboard (transparency) button under the preview to see the alpha
+on overlays.
+
+## Changing resolution / fps
+
+Everything reads from `src/config.ts`:
+
+```ts
+export const WIDTH = 3840;   // 4K
+export const HEIGHT = 2160;
+export const FPS = 60;
+```
+
+Timing is written in seconds with `sec(1.5)` and sizes with `px(120)` (authored at
+1920 wide), so animations keep the same speed and proportions when you switch.
+A single render can also be overridden on the fly with `--scale=2` (1080p → 4K).
+
+## Adding a new graphic
+
+1. **Create the component** — `src/compositions/MyGraphic.tsx`:
+
+   ```tsx
+   import { zColor } from "@remotion/zod-types";
+   import { AbsoluteFill } from "remotion";
+   import { z } from "zod";
+   import { px, sec } from "../config";
+   import { FONT_FAMILY } from "../fonts";
+   import { useEnterExit } from "../lib/animation";
+
+   export const myGraphicSchema = z.object({
+     text: z.string(),
+     color: zColor(),
+   });
+   export type MyGraphicProps = z.infer<typeof myGraphicSchema>;
+   export const myGraphicDefaults: MyGraphicProps = { text: "Hello", color: "#ffffff" };
+
+   export const MyGraphic: React.FC<MyGraphicProps> = ({ text, color }) => {
+     const { presence } = useEnterExit({ enter: sec(0.6), exit: sec(0.4) });
+     return (
+       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
+         <div style={{ fontFamily: FONT_FAMILY, fontSize: px(96), color, opacity: presence }}>
+           {text}
+         </div>
+       </AbsoluteFill>
+     );
+   };
+   ```
+
+   Leave out a `backgroundColor` on the root `AbsoluteFill` if it should be an overlay.
+
+2. **Register it** in `src/Root.tsx`:
+
+   ```tsx
+   <Composition
+     id="MyGraphic"                 // used in render commands; letters, numbers, hyphens
+     component={MyGraphic}
+     durationInFrames={sec(4)}
+     width={WIDTH} height={HEIGHT} fps={FPS}   // or {...canvas}; override for e.g. 1080x1920
+     schema={myGraphicSchema}
+     defaultProps={myGraphicDefaults}
+   />
+   ```
+
+3. It appears in the Studio immediately.
+
+### Animation building blocks
+
+- `useCurrentFrame()` — the current frame number; everything is a function of it.
+- `interpolate(frame, [0, 30], [0, 1], { extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) })` — map a range of frames to any value.
+- `spring({ frame, fps, config: { damping: 200 } })` — natural 0 → 1 motion (lower damping = bouncier).
+- `useEnterExit()` (in `src/lib/animation.ts`) — combines both into `enter`, `exit` and `presence` values that are guaranteed 0 on the first and last frame.
+- `<Sequence from={sec(1)}>` — delay or time-box anything (including audio).
+
+## Rendering / export
+
+Replace `<id>` with a composition id (`TitleCard`, `LowerThird`, `KineticText`, `OverlayBadge`).
+
+**MP4 (H.264)** — opaque graphics, previews, social:
+
+```bash
+npx remotion render <id> out/<id>.mp4 --codec=h264 --crf=18
+```
+
+**Transparent ProRes 4444 (.mov with alpha)** — overlays for your editor:
+
+```bash
+npx remotion render <id> out/<id>.mov --codec=prores \
+  --prores-profile=4444 --pixel-format=yuva444p10le --image-format=png
+```
+
+**PNG sequence (with alpha)**:
+
+```bash
+npx remotion render <id> out/<id> --sequence --image-format=png \
+  --image-sequence-pattern="frame-[frame].[ext]"
+```
+
+> Note: in current Remotion an output path ending in `/frame-%04d.png` is treated as a
+> video filename and fails — use `--sequence` with a folder and `--image-sequence-pattern`
+> as above. Files come out as `out/<id>/frame-000.png`, `frame-001.png`, …
+
+Other useful flags: `--scale=2` (render at 2× size), `--frames=0-59` (partial range),
+`--props='{"title":"Launch Day"}'` (override props without editing code), and
+`npx remotion still <id> out/<id>.png --frame=60` for a single frame.
+
+MP4/H.264 has **no alpha** — use ProRes 4444 or PNG for anything transparent.
+
+## Fonts
+
+`src/fonts.ts` loads **Inter** via `@remotion/google-fonts`. To change it, swap the
+import (e.g. `@remotion/google-fonts/Montserrat`) — every graphic uses `FONT_FAMILY`.
+Remotion waits for the font before rendering each frame, so no fallback-font flashes.
+
+## Sound effects
+
+`OverlayBadge.tsx` shows the pattern — a `<Sequence>` decides **when** the sound plays:
+
+```tsx
+import { Audio, Sequence, staticFile } from "remotion";
+
+<Sequence from={sec(0.5)} durationInFrames={sec(1)} layout="none">
+  <Audio src={staticFile("audio/pop.wav")} volume={0.6} />
+</Sequence>
+```
+
+Put files in `public/audio/`. `pop.wav` is a generated placeholder — replace it.
+Audio is included in MP4 and ProRes renders. (If you'd rather sync sound in your
+editor, toggle `playSound` off in the Props panel.)
+
+## Tips
+
+- **Keep text in the title-safe area.** `SAFE` in `config.ts` is a 5% margin on every
+  side; position text with it so nothing gets cropped by TVs, social crops or player UI.
+- **Always give animations a full enter and exit.** Every element should start and end
+  invisible (opacity/scale 0, or off-screen) so the clip never pops on or cuts off
+  mid-move in your edit. `useEnterExit` does this; check the first and last frame in
+  the Studio.
+- **Trim leading silence on sound effects.** Any silence at the start of a file delays
+  the hit, so it won't land on the frame you placed it on. Trim it in an audio editor.
+- Keep a little hold time between the enter and exit so viewers can read the text
+  (roughly: 1 second + 0.3s per word).
+- Render a quick MP4 to check timing, then render ProRes/PNG for the final overlay.
